@@ -11,7 +11,7 @@
   ((free-after :initform nil)))
 
 (defcstruct* g-object-class-struct
-  (type-class g-type-class) ; :struct
+  (type-classl (:struct g-type-class))
   (construct-properties :pointer)
   (constructor :pointer)
   (set-property :pointer)

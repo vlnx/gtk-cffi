@@ -410,7 +410,7 @@ SIZES -- {(widget minimum-size natural-size)}*"
   ())
 
 (defcstruct widget-class
-  (parent-class g-object-class-struct) ; :struct
+  (parent-class (:struct g-object-class-struct))
   (activate-signal :pointer)
   (dispatch-child-properties-changed :pointer)
   (destroy :pointer)

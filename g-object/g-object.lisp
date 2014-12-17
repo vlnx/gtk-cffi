@@ -146,7 +146,7 @@
                      (make-instance
                       'g-value
                       :pointer (mem-aref
-                                params 'g-value-struct i)))))) ; will be :struct
+                                params '(:struct g-value-struct) i)))))) ; will be :struct
         (lisp-return (make-instance 'g-value :pointer return)))
     (let ((res (apply lisp-func lisp-params)))
       (when (/= (g-type lisp-return) 0)

@@ -96,7 +96,7 @@
 
 (defcstruct tree-model-iface
     "GtkTreeModelIface"
-  (g-iface g-type-interface) ; :struct
+  (g-iface (:struct g-type-interface))
   (row-changed :pointer)
   (row-inserted :pointer)
   (has-child-toggled :pointer)
