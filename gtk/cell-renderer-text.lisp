@@ -8,5 +8,3 @@
 (defmethod gconstructor ((cell-renderer-text cell-renderer-text)
                          &key &allow-other-keys)
   (gtk-cell-renderer-text-new))
-
-

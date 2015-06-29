@@ -20,7 +20,7 @@
 ;; gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
 ;; gtk_widget_set_size_request (frame2, 50, -1);
 
-(let ((window (make-instance 'window :width 200 :height 200 
+(let ((window (make-instance 'window :width 200 :height 200
                              :signals '(:destroy :gtk-main-quit)))
       (hpaned (make-instance 'h-paned))
       (frame1 (make-instance 'frame))
@@ -35,4 +35,3 @@
   (add window hpaned)
   (show window)
   (gtk-main))
-        

@@ -10,7 +10,7 @@
   (g-lib:with-g-error g-error
     (let ((res (g-irepository-require (null-pointer) namespace version
                                       load-flags g-error)))
-      (if (null-pointer-p res) 
+      (if (null-pointer-p res)
           (throw-g-error g-error)
           res))))
 
@@ -46,7 +46,7 @@
             (name (g-irepository-find-by-name (null-pointer) namespace name))
             (gtype (g-irepository-find-by-gtype (null-pointer) gtype))
             (index (g-irepository-get-info (null-pointer) namespace index))
-            (t (error 
+            (t (error
                 "You should fill one of name+namespace, gtype or index"))))
          (base (make-instance 'base-info :pointer p)))
     (unless (null-pointer-p p)

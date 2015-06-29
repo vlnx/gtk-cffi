@@ -10,11 +10,11 @@
   ())
 
 (defslots editable
-  (editable-position . position) :int
-  (is-editable . editable) :boolean)
+    (editable-position . position) :int
+    (is-editable . editable) :boolean)
 
 (deffuns editable
-  (select-region :void (start :int) (end :int))
+    (select-region :void (start :int) (end :int))
   (delete-text :void (start :int) (end :int))
   (:get chars :string (start :int) (end :int))
   (cut-clipboard :void &key)
@@ -24,14 +24,14 @@
 
 (init-slots editable)
 
-(defcfun gtk-editable-get-selection-bounds :void (editable pobject) 
+(defcfun gtk-editable-get-selection-bounds :void (editable pobject)
          (start :pointer) (end :pointer))
 
 (defmethod selection-bounds ((editable editable) &key)
   (with-foreign-outs-list ((start :int) (end :int)) :ignore
-    (gtk-editable-get-selection-bounds editable start end)))
+                          (gtk-editable-get-selection-bounds editable start end)))
 
-(defcfun gtk-editable-insert-text :uint (editable pobject) 
+(defcfun gtk-editable-insert-text :uint (editable pobject)
          (new-text :string) (new-text-length :int) (position :uint))
 
 (defgeneric insert-text (editable position text)
@@ -48,28 +48,28 @@
   (gtk-entry-buffer-new))
 
 (defslots entry-buffer
-  max-length :int)
+    max-length :int)
 
 (deffuns entry-buffer
-  (:get text :string &key)
+    (:get text :string &key)
   (:set text :string &key)
   (:get bytes :int)
   ((entry-buffer-length . get-length) :uint)
   (delete-text :uint (position :uint) (n-chars :int))
   (emit-deleted-text :void (poistion :uint) (n-chars :int)))
 
-(defcfun gtk-entry-buffer-insert-text :uint 
+(defcfun gtk-entry-buffer-insert-text :uint
   (entry-buffer pobject) (position :uint) (chars :string) (n-chars :int))
 
 (defmethod insert-text ((entry-buffer entry-buffer) position text)
   (gtk-entry-buffer-insert-text entry-buffer position text (length text)))
 
-(defcfun gtk-entry-buffer-emit-inserted-text :uint 
+(defcfun gtk-entry-buffer-emit-inserted-text :uint
   (entry-buffer pobject) (position :uint) (chars :string) (n-chars :int))
 
 (defgeneric emit-inserted-text (entry-buffer position text)
   (:method ((entry-buffer entry-buffer) position text)
-    (gtk-entry-buffer-emit-inserted-text entry-buffer position 
+    (gtk-entry-buffer-emit-inserted-text entry-buffer position
                                          text (length text))))
 
 (init-slots entry-buffer)
@@ -88,17 +88,17 @@
       (gtk-entry-completion-new)))
 
 (defslots entry-completion
-  model pobject
-  minimum-key-length :int
-  text-column :int
-  inline-completion :boolean
-  inline-selection :boolean
-  popup-completion :boolean
-  popup-set-width :boolean
-  popup-single-match :boolean)
+    model pobject
+    minimum-key-length :int
+    text-column :int
+    inline-completion :boolean
+    inline-selection :boolean
+    popup-completion :boolean
+    popup-set-width :boolean
+    popup-single-match :boolean)
 
 (deffuns entry-completion
-  (:get entry pobject)
+    (:get entry pobject)
   (compute-prefix (:string :free-from-foreign t) (key :string))
   (complete :void)
   (:get completion-prefix :string)
@@ -110,8 +110,8 @@
 (defcfun gtk-entry-completion-set-match-func :void
   (entry-completion pobject) (func pfunction) (data pdata) (notify pfunction))
 
-(defcallback cb-match-func :boolean 
-    ((entry-completion pobject) (key :string) (tree-iter (object tree-iter)) 
+(defcallback cb-match-func :boolean
+    ((entry-completion pobject) (key :string) (tree-iter (object tree-iter))
      (data pdata))
   (funcall data entry-completion key tree-iter))
 
@@ -156,7 +156,7 @@
 (defcenum entry-icon-position :primary :secondary)
 
 (deffuns entry
-  (:get text :string &key)
+    (:get text :string &key)
   (:set text :string &key)
   (:get text-length :uint16)
   (:set invisible-char unichar)
@@ -168,14 +168,14 @@
   (im-context-filter-keypress :boolean (event pobject))
   (reset-im-context :void)
   (:get icon-storage-type image-type (icon-pos entry-icon-position))
-  (set-icon-drag-source :void (icon-pos entry-icon-position) 
-                        (target-list (object target-list)) 
+  (set-icon-drag-source :void (icon-pos entry-icon-position)
+                        (target-list (object target-list))
                         (actions drag-action))
   (:get current-icon-drag-source :int)
   (:get icon-at-pos :int (x :int) (y :int)))
 
 
-(defcfun gtk-entry-get-text-area :void (entry pobject) 
+(defcfun gtk-entry-get-text-area :void (entry pobject)
          (area (struct rectangle :out t)))
 
 (defgeneric text-area (entry)
@@ -184,7 +184,7 @@
       (gtk-entry-get-text-area entry r)
       r)))
 
-(defcfun gtk-entry-get-icon-area :void (entry pobject) 
+(defcfun gtk-entry-get-icon-area :void (entry pobject)
          (icon-pos entry-icon-position) (area (struct rectangle :out t)))
 
 (defgeneric icon-area (entry icon-pos)
@@ -194,12 +194,12 @@
       r)))
 
 
-(defcfun gtk-entry-get-layout-offsets :void (entry pobject) 
+(defcfun gtk-entry-get-layout-offsets :void (entry pobject)
          (x :pointer) (y :pointer))
 
 (defmethod layout-offsets ((entry entry))
   (with-foreign-outs-list ((x :int) (y :int)) :ignore
-    (gtk-entry-get-layout-offsets entry x y)))    
+                          (gtk-entry-get-layout-offsets entry x y)))
 
 
 (template (item type from) ((pixbuf pobject t)
@@ -210,27 +210,25 @@
                             (sensitive :boolean nil)
                             (tooltip-text :string nil)
                             (tooltip-markup :string nil))
-  (let ((set-name (if from
-                      (symbolicate 'gtk-entry-set-icon-from- item)
-                      (symbolicate 'gtk-entry-set-icon- item)))
-        (get-name (symbolicate 'gtk-entry-get-icon- 
-                               (if (eq item 'icon-name) 'name item)))
-        (lisp-name (symbolicate 'icon- item)))
-    `(progn
-       (defcfun ,set-name :void
-         (entry pobject) (icon-pos entry-icon-position) (,item ,type))
+          (let ((set-name (if from
+                              (symbolicate 'gtk-entry-set-icon-from- item)
+                              (symbolicate 'gtk-entry-set-icon- item)))
+                (get-name (symbolicate 'gtk-entry-get-icon-
+                                       (if (eq item 'icon-name) 'name item)))
+                (lisp-name (symbolicate 'icon- item)))
+            `(progn
+               (defcfun ,set-name :void
+                 (entry pobject) (icon-pos entry-icon-position) (,item ,type))
 
-       (defgeneric (setf ,lisp-name) (value entry icon-pos)
-         (:method (value (entry entry) icon-pos)
-           (,set-name entry icon-pos value)))
-       
-       (defcfun ,get-name ,type
-         (entry pobject) (icon-pos entry-icon-position))
+               (defgeneric (setf ,lisp-name) (value entry icon-pos)
+                 (:method (value (entry entry) icon-pos)
+                   (,set-name entry icon-pos value)))
 
-       (defgeneric ,lisp-name (entry icon-pos)
-         (:method ((entry entry) icon-pos)
-           (,get-name entry icon-pos))))))
+               (defcfun ,get-name ,type
+                 (entry pobject) (icon-pos entry-icon-position))
+
+               (defgeneric ,lisp-name (entry icon-pos)
+                 (:method ((entry entry) icon-pos)
+                   (,get-name entry icon-pos))))))
 
 (init-slots entry)
-
-

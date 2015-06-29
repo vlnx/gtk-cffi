@@ -23,7 +23,7 @@
 (defmethod translate-from-foreign (ptr (type variant-type))
   (declare (type foreign-pointer ptr))
   (when (not (null-pointer-p ptr))
-    (foreign-string-to-lisp 
+    (foreign-string-to-lisp
      (g-variant-type-peek-string ptr)
      :count (g-variant-type-get-string-length ptr))))
 

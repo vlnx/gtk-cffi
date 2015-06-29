@@ -12,8 +12,8 @@
       (gtk-combo-box-text-new)))
 
 (deffuns combo-box-text
-  ((combo-box-append . append) :void (id :string) (text :string))
-  ((combo-box-insert . insert) 
+    ((combo-box-append . append) :void (id :string) (text :string))
+  ((combo-box-insert . insert)
    :void (position :int) (id :string) (text :string))
   ((combo-box-prepend . prepend) :void (id :string) (text :string))
   (append-text :void (text :string))

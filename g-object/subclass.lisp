@@ -7,8 +7,8 @@
 
 (in-package #:g-object-cffi)
 
-(defcstruct g-type-info 
-    "GTypeInfo"
+(defcstruct g-type-info
+  "GTypeInfo"
   (class-size :uint16)
   (base-init :pointer) ; GBaseInitFunc
   (base-finalize :pointer) ; GBaseFinalizeFunc
@@ -20,15 +20,15 @@
   (instance-init :pointer) ; GInstanceInitFunc
   (value-table :pointer)) ; GTypeValueTable* == null
 
-(defcenum g-type-flags 
-    "GTypeFlags"
+(defcenum g-type-flags
+  "GTypeFlags"
   (:abstract 16)
   :value-abstract)
-  
 
-(defcfun g-type-register-static g-type 
-  (parent-type g-type) (type-name :string) 
-  (info :pointer) ; (:struct g-type-info))) 
+
+(defcfun g-type-register-static g-type
+  (parent-type g-type) (type-name :string)
+  (info :pointer) ; (:struct g-type-info)))
   (flags g-type-flags))
 
 (defcfun g-type-register-static-simple g-type
@@ -37,14 +37,11 @@
   (flags g-type-flags))
 
 (defcstruct g-interface-info
-    "GInterfaceInfo"
+  "GInterfaceInfo"
   (interface-init :pointer) ; GInterfaceInitFunc
   (interface-finalize :pointer) ; GInterfaceFinalizeFunc
   (interface-data :pointer))
 
 (defcfun g-type-add-interface-static :void
-  (instance-type g-type) (interface-type g-type) 
+  (instance-type g-type) (interface-type g-type)
   (info :pointer)); (:struct g-interface-info))))
-
-
-  

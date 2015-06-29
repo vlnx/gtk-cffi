@@ -32,11 +32,11 @@
 (defmacro with-parent-path (path parent child-path &body body)
   `(let ((,path (path-from-child ,parent ,child-path)))
      (unwind-protect
-         (progn ,@body)
+          (progn ,@body)
        (when ,path (free ,path)))))
 
 (defcfun gtk-tree-model-filter-convert-iter-to-child-iter :void
-  (model pobject) (child-iter (struct tree-iter :out t)) 
+  (model pobject) (child-iter (struct tree-iter :out t))
   (iter (struct tree-iter)))
 
 (defmethod iter-to-child ((tree-model-filter tree-model-filter)
@@ -49,18 +49,15 @@
 (defmacro with-child-iter (child-iter parent tree-iter &body body)
   `(let ((,child-iter (iter-to-child ,parent ,tree-iter)))
      (unwind-protect
-         (progn ,@body)
+          (progn ,@body)
        (when ,child-iter (free ,child-iter)))))
 
 (defcfun "gtk_tree_model_filter_get_model" pobject (model pobject))
 
 (defmethod (setf model-values)
-  (values (tree-model-filter tree-model-filter)
-          &key (tree-iter (tree-iter tree-model-filter)) column
-          (columns (when column (list column))))
+    (values (tree-model-filter tree-model-filter)
+     &key (tree-iter (tree-iter tree-model-filter)) column
+       (columns (when column (list column))))
   (with-child-iter child-iter tree-model-filter tree-iter
-    (setf (model-values (model tree-model-filter) 
-                        :tree-iter child-iter :columns columns) values)))
-
-  
-
+                   (setf (model-values (model tree-model-filter)
+                                       :tree-iter child-iter :columns columns) values)))

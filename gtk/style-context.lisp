@@ -1,7 +1,7 @@
 (in-package :gtk-cffi)
 
 (defcstruct* border
-  (left :int16)
+    (left :int16)
   (right :int16)
   (top :int16)
   (bottom :int16))
@@ -19,17 +19,17 @@
 (defgtkgetter screen pobject style-context)
 (defgtkgetter state state-flags style-context)
 
-(defcfun gtk-style-context-get-color :void 
+(defcfun gtk-style-context-get-color :void
   (style-context pobject) (state state-flags) (color :pointer))
 
-(defcfun gtk-style-context-get-background-color :void 
+(defcfun gtk-style-context-get-background-color :void
   (style-context pobject) (state state-flags) (color :pointer))
 
-(defcfun gtk-style-context-get-border-color :void 
+(defcfun gtk-style-context-get-border-color :void
   (style-context pobject) (state state-flags) (color :pointer))
 
 (defgeneric color (object &key type state))
-(defmethod color ((style-context style-context) 
+(defmethod color ((style-context style-context)
                   &key type (state :normal))
   (with-foreign-object (color 'prgba)
     (funcall
@@ -43,29 +43,29 @@
   (style-context pobject) (state state-flags))
 
 (defgeneric font (object &key state))
-(defmethod font ((style-context style-context) 
-                  &key (state :normal))
+(defmethod font ((style-context style-context)
+                 &key (state :normal))
   (gtk-style-context-get-font style-context state))
 
-(defgtkfun add-provider :void style-context 
+(defgtkfun add-provider :void style-context
            (style-provider pobject) (priority :uint))
 
 (defgeneric load-css (style-context text))
 (defmethod load-css ((style-context style-context) text)
   (if (slot-boundp style-context 'provider)
-    (css-provider-load (slot-value style-context 'provider) :data text)
-    (progn
-      (let ((provider (make-instance 'css-provider)))
-        (setf (slot-value style-context 'provider) provider)
-        (css-provider-load provider :data text)
-        (add-provider style-context provider 600)))))
+      (css-provider-load (slot-value style-context 'provider) :data text)
+      (progn
+        (let ((provider (make-instance 'css-provider)))
+          (setf (slot-value style-context 'provider) provider)
+          (css-provider-load provider :data text)
+          (add-provider style-context provider 600)))))
 
 (defun make-css (style-context type state value)
   (let ((found (assoc (list type state) (slot-value style-context 'styles)
                       :test #'equal)))
     (if found
         (setf (cdr found) value)
-        (push (cons (list type state) value) 
+        (push (cons (list type state) value)
               (slot-value style-context 'styles))))
   (with-output-to-string (s)
     (mapc (lambda (x)
@@ -76,29 +76,29 @@
                         (:bg "background-color")
                         (:border "border-color")
                         (:font "font")
-                        ;(:bg-image "border-image")
+                                        ;(:bg-image "border-image")
                         (:bg-image "background-image")
                         (t "color"))
                       value)))
           (slot-value style-context 'styles))))
 
 (defgeneric (setf color) (value object &key type state))
-(defmethod (setf color) (value (style-context style-context) 
+(defmethod (setf color) (value (style-context style-context)
                          &key type (state :normal))
   (check-type type (member :bg :border nil))
   (load-css style-context (make-css style-context type state value)))
 
 (defgeneric (setf font) (value object &key state))
-(defmethod (setf font) (value (style-context style-context) 
-                         &key (state :normal))
+(defmethod (setf font) (value (style-context style-context)
+                        &key (state :normal))
   (load-css style-context (make-css style-context :font state value)))
 
 (defgeneric (setf bg-pixmap) (value object &key state))
-(defmethod (setf bg-pixmap) (value (style-context style-context) 
-                         &key (state :normal))
-  (load-css style-context 
-            (make-css style-context :bg-image state 
-                      (format nil 
+(defmethod (setf bg-pixmap) (value (style-context style-context)
+                             &key (state :normal))
+  (load-css style-context
+            (make-css style-context :bg-image state
+                      (format nil
                               "url('~a')" value))))
 
 (defgeneric bg-pixmap (object &key state))

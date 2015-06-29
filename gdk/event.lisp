@@ -41,9 +41,9 @@
   :focus-change :configure :map :unmap :property-notify
   :selection-clear :selection-request :selection-notify
   :proximity-in :proximity-out
-  :drag-enter :drag-leave :drag-motion :drag-status 
+  :drag-enter :drag-leave :drag-motion :drag-status
   :drop-start :drop-finished :client-event :visibility-notify
-  :no-expose :scroll :window-state :setting :owner-change 
+  :no-expose :scroll :window-state :setting :owner-change
   :grab-broken :damage)
 
 (defcstruct event-any
@@ -121,7 +121,7 @@
 (defctype region :pointer) ;; = GdkRegion*
 
 (defcstruct* event-expose
-  (event-expose-type event-type)
+    (event-expose-type event-type)
   (window window)
   (send-event :int8)
   (area (:struct rectangle))
@@ -316,8 +316,8 @@
   ((event-type :accessor event-type)))
 
 (defmethod initialize-instance
-  :after ((event event)
-          &key pointer &allow-other-keys)
+    :after ((event event)
+            &key pointer &allow-other-keys)
   (setf (event-type event)
         (case (foreign-slot-value pointer 'event 'type) ; :union
           ((:nothing :delete :destroy :map :unmap) 'event-any)
@@ -347,7 +347,7 @@
           (t 'event-any))))
 
 (defmethod get-slot ((event event) field)
-  (foreign-slot-value (pointer event) 
+  (foreign-slot-value (pointer event)
                       (cffi-objects::struct-type (event-type event))
                       (find-symbol (string field) :gdk-cffi)))
 

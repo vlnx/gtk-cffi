@@ -9,7 +9,7 @@
    #:require
    #:get-n-infos
    #:get-info
-   
+
    #:ref
    #:unref
    #:get-type

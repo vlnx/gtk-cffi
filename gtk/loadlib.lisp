@@ -11,9 +11,9 @@
   (unless (find :gtk *features*)
     (push :gtk *features*)
     (define-foreign-library :gtk
-      (:unix (:or "libgtk-3.so.0" "libgtk-3.so"))
+        (:unix (:or "libgtk-3.so.0" "libgtk-3.so"))
       (:windows "libgtk-win32-3-0.dll"))
-    
+
     (use-foreign-library :gtk)))
 
 (eval-when (:compile-toplevel)
@@ -23,4 +23,3 @@
     (push :gtk3.2 *features*))
   (when (and (>= (gtk-get-major-version) 3) (>= (gtk-get-minor-version) 4))
     (push :gtk3.4 *features*)))
-

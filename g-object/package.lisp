@@ -20,19 +20,19 @@
    #:properties
    #:gsignal
    #:connect-flags
-   
+
    #:connect
 
    #:storage
    ;; slot
    #:data
-   
+
    ;; callback
    #:free-storage
 
    ;; macro
    #:with-object
-   
+
    ;; type
    #:pobject
    #:pdata
@@ -45,7 +45,7 @@
    #:unset
    #:init
 
-;   #:g-type->name
+                                        ;   #:g-type->name
    #:g-type->lisp
    #:keyword->g-type
    #:g-type
@@ -80,7 +80,7 @@
    #:new
    #:make-closure
 
-   ; utility functions
+                                        ; utility functions
    #:defslot
    #:defgdkslot
    #:defgtkslot

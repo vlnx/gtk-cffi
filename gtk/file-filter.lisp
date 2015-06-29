@@ -14,10 +14,7 @@
   :filename :uri :display-name :mime-type)
 
 (deffuns file-filter
-  (add-mime-type :void (mime-type :string))
+    (add-mime-type :void (mime-type :string))
   (add-pattern :void (pattern :string))
   (add-pixbuf-formats :void)
   (:get needed filter-flags))
-  
-  
-    

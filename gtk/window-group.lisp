@@ -15,7 +15,7 @@
   (gtk-window-group-new))
 
 (deffuns window-group
-  (add-window :void (window pobject))
+    (add-window :void (window pobject))
   (remove-window :void (window pobject))
   (list-windows g-list-object)
   (:get current-grab pobject)

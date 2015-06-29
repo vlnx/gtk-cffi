@@ -6,7 +6,7 @@
 (defcfun gtk-action-new :pointer (name gtk-string) (label gtk-string)
          (tooltip gtk-string) (stockid gtk-string))
 
-(defmethod gconstructor ((action action) 
+(defmethod gconstructor ((action action)
                          &key name label tooltip stock-id &allow-other-keys)
   (gtk-action-new name label tooltip stockid))
 
@@ -15,7 +15,7 @@
 (defmethod name ((action action))
   (gtk-action-get-name action))
 
-(defgtkslots action 
+(defgtkslots action
     sensitive :boolean
     visible :boolean
     accel-path gtk-string
@@ -28,4 +28,3 @@
     is-important :boolean)
 
 (init-slots action)
-

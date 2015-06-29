@@ -19,11 +19,11 @@
 make up lisp object"
   (declare (type foreign-pointer ptr))
   (unless (null-pointer-p ptr)
-;    (format t "pobject: ~a~%" ptr)
-    (let ((class (or (object-class cffi-pobject) 
+                                        ;    (format t "pobject: ~a~%" ptr)
+    (let ((class (or (object-class cffi-pobject)
                      (g-type->lisp (g-type-from-instance ptr)))))
- ;     (format t "gtype: ~a :: ~a~%" (g-type-from-instance ptr) class)
-      
+                                        ;     (format t "gtype: ~a :: ~a~%" (g-type-from-instance ptr) class)
+
       (find-object ptr class))))
 
 ;; register as object type for g-list
@@ -60,14 +60,14 @@ make up lisp object"
 an id for the data. NB! Don't forget to free pointers after use."))
 
 (defmethod free-ptr ((type (eql 'cffi-pdata)) object)
-                                        ; it's not typo: 
+                                        ; it's not typo:
                                         ;we free object, not pointer
   (free object))
 
 (defmethod translate-from-foreign (ptr (type cffi-pdata))
   "Returns saved data."
   (let ((obj (find-object ptr)))
-    (if obj 
+    (if obj
         (typecase obj
           (storage (prog1 (data obj) (free-returned-if-needed type obj)))
           (t obj))

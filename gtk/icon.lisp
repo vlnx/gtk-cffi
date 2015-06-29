@@ -15,7 +15,7 @@
   :dnd
   :dialog)
 
-(defcenum state 
+(defcenum state
   :normal :active :prelight :selected :insensitive :inconsistent :focused)
 
 (defclass icon-source (object) ())

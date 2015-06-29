@@ -8,20 +8,19 @@
 (defparameter *window*
   (gtk-model
    'window :width 80
-           :title "Hello world!"
-           :signals `(:destroy 
-                      :gtk-main-quit
-                      :enter-notify-event 
-                      ,(lambda (widget event) 
-                        (declare (ignore widget event))
-                        (format t "Entered~%")))
+   :title "Hello world!"
+   :signals `(:destroy
+              :gtk-main-quit
+              :enter-notify-event
+              ,(lambda (widget event)
+                       (declare (ignore widget event))
+                       (format t "Entered~%")))
    ('button :label "Hello!"
-            :signals (list :clicked 
-                           (let ((count 0)) 
-                             (lambda (widget) 
+            :signals (list :clicked
+                           (let ((count 0))
+                             (lambda (widget)
                                (declare (ignore widget))
-                               (format t "Pressed ~a times~%" 
+                               (format t "Pressed ~a times~%"
                                        (incf count))))))))
 (show *window*)
 (gtk-main)
-                                      

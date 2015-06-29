@@ -1,6 +1,6 @@
 ;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
 ;;;
-;;; tree-model.lisp --- GtkTreeModel, GtkTreePath, GtkTreeIter, 
+;;; tree-model.lisp --- GtkTreeModel, GtkTreePath, GtkTreeIter,
 ;;;                     GtkTreeRowReference
 ;;;
 ;;; Copyright (C) 2012, Roman Klochkov <kalimehtar@mail.ru>
@@ -15,7 +15,7 @@
 (defcfun gtk-tree-path-new-from-string :pointer (str :string))
 (defcfun gtk-tree-path-append-index :void (path :pointer) (index :int))
 
-(defcfun gtk-tree-path-get-indices-with-depth :pointer 
+(defcfun gtk-tree-path-get-indices-with-depth :pointer
   (path :pointer) (depth :pointer))
 
 (define-foreign-type tree-path (freeable)
@@ -76,11 +76,11 @@
   (gtk-tree-row-reference-free ptr))
 
 (deffuns tree-row-reference
-  (copy (object tree-row-reference))
+    (copy (object tree-row-reference))
   (:get model pobject)
   (:get path tree-path)
   (valid :boolean))
-  
+
 
 (defcstruct* tree-iter
     "GtkTreeIter"
@@ -95,7 +95,7 @@
    (iter :accessor tree-iter :documentation "Current tree-iter")))
 
 (defcstruct tree-model-iface
-    "GtkTreeModelIface"
+  "GtkTreeModelIface"
   (g-iface (:struct g-type-interface))
   (row-changed :pointer)
   (row-inserted :pointer)
@@ -103,7 +103,7 @@
   (row-deleted :pointer)
   (row-reordered :pointer)
 
-  ; virtual methods
+                                        ; virtual methods
   (get-flags :pointer)
   (get-n-columns :pointer)
   (get-column-type :pointer)
@@ -121,9 +121,9 @@
   (unref-node :pointer))
 
 (defmethod initialize-instance
-  :after ((tree-model tree-model)
-          &key &allow-other-keys)
-  (setf (tree-iter tree-model) (make-instance 'tree-iter :new-struct t 
+    :after ((tree-model tree-model)
+            &key &allow-other-keys)
+  (setf (tree-iter tree-model) (make-instance 'tree-iter :new-struct t
                                               :free-after nil)))
 
 (defmethod free :before ((tree-model tree-model))
@@ -131,11 +131,11 @@
 
 (make-foreach tree-model
               (model pobject)
-              (path ptree-path) 
+              (path ptree-path)
               (tree-iter (object tree-iter))
               (data pdata))
 
-(defcfun gtk-tree-model-get-path tree-path 
+(defcfun gtk-tree-model-get-path tree-path
   (model pobject) (tree-iter (struct tree-iter)))
 
 (defgeneric iter->path (tree-model tree-iter)
@@ -150,18 +150,18 @@
     (gtk-tree-model-get-string-from-iter tree-model tree-iter)))
 
 (defcfun gtk-tree-model-get-value :void (model pobject) (iter pobject)
-  (column :int) (g-value pobject))
+         (column :int) (g-value pobject))
 
 (defgeneric model-values (tree-model &key tree-iter column columns)
-  (:method ((tree-model tree-model) 
-            &key (tree-iter (tree-iter tree-model)) 
-                 column 
-                 (columns (ensure-list column)))
+  (:method ((tree-model tree-model)
+            &key (tree-iter (tree-iter tree-model))
+              column
+              (columns (ensure-list column)))
     "columns = num0 &optional num1 num2 ..."
                                         ;(format t "model-values: ~a ~a ~a~%" tree-model tree-iter cols)
     (mapcar
-     (lambda (col) 
-       (with-g-value ()  
+     (lambda (col)
+       (with-g-value ()
          (gtk-tree-model-get-value tree-model
                                    tree-iter col *g-value*)))
      columns)))
@@ -170,7 +170,7 @@
   (model pobject) (iter (struct tree-iter :out t)) (path tree-path))
 
 (defcfun gtk-tree-model-get-iter-from-string :boolean
-    (model pobject) (tree-iter (struct tree-iter :out t)) (path :string))
+  (model pobject) (tree-iter (struct tree-iter :out t)) (path :string))
 
 (defgeneric path->iter (tree-model tree-path-string &optional tree-iter)
   (:method ((tree-model tree-model) tree-path
@@ -179,7 +179,7 @@
       tree-iter))
   (:method ((tree-model tree-model) (tree-path-string string)
             &optional (tree-iter (tree-iter tree-model)))
-    (when (gtk-tree-model-get-iter-from-string tree-model 
+    (when (gtk-tree-model-get-iter-from-string tree-model
                                                tree-iter tree-path-string)
       tree-iter)))
 
@@ -190,7 +190,7 @@
 (defbitfield tree-model-flags :iters-persist :list-only)
 
 (deffuns tree-model
-  (:get n-columns :int)
+    (:get n-columns :int)
   (:get column-type g-type (col :int))
   (:get flags tree-model-flags)
   (iter-has-child :boolean (tree-iter (struct tree-iter)))
@@ -201,24 +201,24 @@
   (row-inserted :void (path tree-path) (tree-iter (struct tree-iter)))
   (row-has-child-toggled :void (path tree-path) (tree-iter (struct tree-iter)))
   (row-deleted :void (path tree-path))
-  (rows-reordered :void 
+  (rows-reordered :void
                   (path tree-path) (tree-iter (struct tree-iter))
                   (new-order (carray :int))))
 
-(template 
-    (name lisp-name) 
-    ((get-iter-first iter-first)
-     (iter-next iter-next)
-     (iter-previous iter-previous))
-  (let ((c-name (symbolicate 'gtk-tree-model- name)))
-    `(progn
-       (defcfun ,c-name :boolean
-         (model pobject) (tree-iter (struct tree-iter :out t)))
-       (defgeneric ,lisp-name (tree-model &optional tree-iter)
-         (:method ((tree-model tree-model) 
-                   &optional (tree-iter (tree-iter tree-model)))
-           (when (,c-name tree-model tree-iter)
-             tree-iter))))))
+(template
+ (name lisp-name)
+ ((get-iter-first iter-first)
+  (iter-next iter-next)
+  (iter-previous iter-previous))
+ (let ((c-name (symbolicate 'gtk-tree-model- name)))
+   `(progn
+      (defcfun ,c-name :boolean
+        (model pobject) (tree-iter (struct tree-iter :out t)))
+      (defgeneric ,lisp-name (tree-model &optional tree-iter)
+        (:method ((tree-model tree-model)
+                  &optional (tree-iter (tree-iter tree-model)))
+          (when (,c-name tree-model tree-iter)
+            tree-iter))))))
 
 (defcfun gtk-tree-model-iter-nth-child :boolean
   (model pobject) (tree-iter (struct tree-iter :out t))

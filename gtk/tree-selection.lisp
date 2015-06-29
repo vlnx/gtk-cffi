@@ -9,7 +9,7 @@
 (defslot tree-selection mode selection-mode)
 
 (deffuns tree-selection
-  (:get select-function :pointer)
+    (:get select-function :pointer)
   (:get user-data pdata)
   (:get tree-view pobject)
   (count-selected-rows :int)
@@ -23,7 +23,7 @@
   (unselect-all :void)
   (select-range :void (start-path tree-path) (end-path tree-path))
   (unselect-range :void (start-path tree-path) (end-path tree-path)))
-  
+
 
 (defcallback cb-tree-selection-func :boolean
     ((selection pobject) (model pobject) (path ptree-path)
@@ -33,8 +33,8 @@
 (defcfun gtk-tree-selection-set-select-function :void
   (selection pobject) (func pfunction) (data pdata) (destroy pfunction))
 
-(defgeneric (setf select-function) (tree-selection func 
-                                                   &key data destroy-notify)
+(defgeneric (setf select-function) (tree-selection func
+                                    &key data destroy-notify)
   (:method ((tree-selection tree-selection) func &key data destroy-notify)
     (set-callback tree-selection gtk-tree-selection-set-select-function
                   cb-tree-selection-func func data destroy-notify)))
@@ -47,21 +47,21 @@
     (let ((tree-iter (make-instance 'tree-iter)))
       (with-foreign-object (p :pointer)
         (when (gtk-tree-selection-get-selected tree-selection p tree-iter)
-          (values tree-iter (convert-from-foreign (mem-ref p :pointer) 
+          (values tree-iter (convert-from-foreign (mem-ref p :pointer)
                                                   'pobject)))))))
 
 (defcfun gtk-tree-selection-get-selected-rows (g-list :elt tree-path)
   (selection pobject) (model :pointer))
-                                             
+
 (defgeneric selected-rows (tree-selection)
   (:method ((tree-selection tree-selection))
     (with-foreign-object (p :pointer)
       (values (gtk-tree-selection-get-selected-rows tree-selection p)
               (mem-ref p 'pobject)))))
-    
+
 
 (make-foreach (tree-selection gtk-tree-selection-selected-foreach)
-              (model pobject) (path tree-path :free-from-foreign nil) 
+              (model pobject) (path tree-path :free-from-foreign nil)
               (tree-iter (struct tree-iter)) (data pdata))
 
 ;; (defcfun gtk-tree-selection-selected-foreach :void
@@ -70,21 +70,16 @@
 ;; (defvar *tree-selection-foreach* nil)
 
 ;; (defcallback cb-tree-selection-foreach :boolean
-;;   ((model pobject) (path tree-path :free-from-foreign nil) 
+;;   ((model pobject) (path tree-path :free-from-foreign nil)
 ;;    (tree-iter (struct tree-iter)) (data pdata))
 ;;   (when *tree-selection-foreach*
 ;;     (funcall *tree-selection-foreach* model path tree-iter data)))
 
 ;; (defmethod foreach ((tree-selection tree-selection)
 ;;                                func &optional (data (null-pointer)))
-;;   (when func    
+;;   (when func
 ;;     (let ((*tree-selection-foreach* func))
-;;       (gtk-tree-selection-selected-foreach 
+;;       (gtk-tree-selection-selected-foreach
 ;;        tree-selection (if (functionp func)
 ;;                           (callback cb-tree-selection-foreach) func)
 ;;        data))))
-
-
-
-
-

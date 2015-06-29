@@ -45,48 +45,48 @@
 
 (defclass keymap-key (struct) ())
 (defcstruct* keymap-key
-  (keycode :uint)
+    (keycode :uint)
   (group :int)
   (level :int))
 
 (defgdkfuns keymap
-  (lookup-key :uint (key :pointer))
+    (lookup-key :uint (key :pointer))
   (:get direction pango-cffi:direction)
   (have-bidi-layouts :boolean)
   (:get caps-lock-state :boolean)
   (:get num-lock-state :boolean))
 
 (defcfun gdk-keymap-translate-keyboard-state :boolean
-  (keymap pobject) (hardware-keycode :uint) (state modifier-type) (group :int) 
+  (keymap pobject) (hardware-keycode :uint) (state modifier-type) (group :int)
   (keyval :pointer) (effective-group :pointer) (level :pointer)
   (consumed-modifier :pointer))
 
 (defgeneric translate-keyboard-state (keymap hardware-keycode state group))
-(defmethod translate-keyboard-state ((keymap keymap) 
+(defmethod translate-keyboard-state ((keymap keymap)
                                      hardware-keycode state group)
   (with-foreign-outs ((keyval :uint) (effective-group :int) (level :int)
                       (consumed-modifier 'modifier-type)) :if-success
-    (gdk-keymap-translate-keyboard-state keymap hardware-keycode state group
-                                         keyval effective-group level
-                                         consumed-modifier)))
+                      (gdk-keymap-translate-keyboard-state keymap hardware-keycode state group
+                                                           keyval effective-group level
+                                                           consumed-modifier)))
 
 (defcfun gdk-keymap-get-entries-for-keyval :boolean
   (keymap pobject) (keyval key) (keys :pointer) (n-keys :pointer))
 
 (defgeneric entries-for-keyval (keymap keyval))
 (defmethod entries-for-keyval ((keymap keymap) keyval)
-    (with-foreign-out (keys '(garray (struct keymap-key))) :if-success
-      (gdk-keymap-get-entries-for-keyval 
-       keymap keyval keys *array-length*)))
+  (with-foreign-out (keys '(garray (struct keymap-key))) :if-success
+                    (gdk-keymap-get-entries-for-keyval
+                     keymap keyval keys *array-length*)))
 
 (defcfun gdk-keymap-get-entries-for-keycode :boolean
-  (keymap pobject) (hardware-keycode :uint) 
+  (keymap pobject) (hardware-keycode :uint)
   (keys :pointer) (keyvals :pointer) (n-keys :pointer))
 
 
 (defgeneric entries-for-keycode (keymap keycode))
 (defmethod entries-for-keycode ((keymap keymap) keycode)
-    (with-foreign-outs ((keys '(garray (struct keymap-key)))
-                        (keyvals '(garray :uint))) :if-success
-      (gdk-keymap-get-entries-for-keycode
-       keymap keycode keys keyvals *array-length*)))
+  (with-foreign-outs ((keys '(garray (struct keymap-key)))
+                      (keyvals '(garray :uint))) :if-success
+                      (gdk-keymap-get-entries-for-keycode
+                       keymap keycode keys keyvals *array-length*)))

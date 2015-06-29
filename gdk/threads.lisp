@@ -5,7 +5,7 @@
 
 (defmacro with-threads (&rest body)
   `(unwind-protect
-	(progn
-	  (gdk-threads-enter)
-	  ,@body)
+        (progn
+          (gdk-threads-enter)
+          ,@body)
      (gdk-threads-leave)))

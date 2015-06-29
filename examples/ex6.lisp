@@ -40,21 +40,21 @@ Part 2 - using GdkDrawable::draw_pixbuf()")))
          (dest-x (- (width (allocation widget)) w))
          (dest-y 0))
     (format t "~a~%" pixbuf)
-      (cl-cairo2:with-context ((make-instance 'cl-cairo2:context 
-                                              :pointer context))
-        (unless (cffi:null-pointer-p (cffi-objects:pointer pixbuf))
-          (cairo-set-source-pixbuf pixbuf dest-x dest-y)
-          (cl-cairo2:paint))
-        (let ((ch (child widget)))
-          (when ch (propagate-draw widget ch)))))
+    (cl-cairo2:with-context ((make-instance 'cl-cairo2:context
+                                            :pointer context))
+      (unless (cffi:null-pointer-p (cffi-objects:pointer pixbuf))
+        (cairo-set-source-pixbuf pixbuf dest-x dest-y)
+        (cl-cairo2:paint))
+      (let ((ch (child widget)))
+        (when ch (propagate-draw widget ch)))))
   t)
-    
-;    (draw-pixbuf (gdk-window widget)
-;                 (style-field widget :bg-gc) pixbuf 0 0 dest-x dest-y)
-    ;(let ((ch (child widget)))
-    ;  (when ch
-    ;    (propagate- widget ch event)))
-      
+
+                                        ;    (draw-pixbuf (gdk-window widget)
+                                        ;                 (style-field widget :bg-gc) pixbuf 0 0 dest-x dest-y)
+                                        ;(let ((ch (child widget)))
+                                        ;  (when ch
+                                        ;    (propagate- widget ch event)))
+
 
 (let  ((eventbox-left (make-instance 'event-box))
        (vbox-left (make-instance 'v-box :homogeneous t)))
@@ -82,8 +82,3 @@ Part 2 - using GdkDrawable::draw_pixbuf()")))
 
 (show window :all t)
 (gtk-main)
-
-
-
-
-        

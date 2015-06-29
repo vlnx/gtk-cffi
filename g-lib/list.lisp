@@ -12,7 +12,7 @@
 ;; Only convertors to and from lisp lists
 
 (defcfun g-list-free :void (g-list :pointer))
-(defcfun g-list-foreach :void 
+(defcfun g-list-foreach :void
   (g-list :pointer) (func :pointer) (data :pointer))
 (defcfun g-list-prepend :pointer (g-list :pointer) (data object))
 (defcfun g-list-reverse :pointer (g-list :pointer))
@@ -24,7 +24,7 @@
   (:documentation "Tests is TYPE-NAME is member of object types")
   (:method ((type-name (eql 'object))) t)
   (:method (type-name) nil))
-                  
+
 
 (defcallback list-collect :void ((data :pointer) (user-data :pointer))
   (declare (ignore user-data))
@@ -56,8 +56,8 @@
   (let ((converter
          (let ((list-type (list-type g-list)))
            (if (and list-type (not (object-type (ensure-car list-type))))
-             (lambda (x) (foreign-alloc list-type :initial-element x))
-             #'identity))))
+               (lambda (x) (foreign-alloc list-type :initial-element x))
+               #'identity))))
     (let ((p (null-pointer)))
       (mapc (lambda (x)
               (setf p (g-list-prepend p (apply converter x))))
@@ -67,14 +67,14 @@
 
 ;; Copy-paste fom g-list. Bad, but what to do?
 (define-foreign-type g-slist (freeable)
-  ((list-type :initarg :elt :accessor list-type 
+  ((list-type :initarg :elt :accessor list-type
               :documentation "If null, then list is of pointers or GObjects")
    (free-from-foreign :initform t))
   (:simple-parser g-slist)
   (:actual-type :pointer))
 
 (defcfun g-slist-free :void (g-slist :pointer))
-(defcfun g-slist-foreach :void 
+(defcfun g-slist-foreach :void
   (g-list :pointer) (func :pointer) (data :pointer))
 (defcfun g-slist-prepend :pointer (g-slist :pointer) (data object))
 (defcfun g-slist-reverse :pointer (g-slist :pointer))
@@ -95,8 +95,8 @@
   (let ((converter
          (let ((list-type (list-type g-slist)))
            (if (and list-type (not (object-type (ensure-car list-type))))
-             (lambda (x) (foreign-alloc list-type :initial-element x))
-             #'identity))))
+               (lambda (x) (foreign-alloc list-type :initial-element x))
+               #'identity))))
     (let ((p (null-pointer)))
       (mapc (lambda (x)
               (setf p (g-slist-prepend p (apply converter x))))
@@ -115,8 +115,8 @@
 
 (defmethod translate-from-foreign (ptr (type string-list))
   (declare (type foreign-pointer ptr))
-  (iter      
-    (for i from 0)
-    (for pstr = (mem-aref ptr :pointer i))
-    (while (not (null-pointer-p pstr)))
-    (collect (convert-from-foreign pstr :string))))
+  (iter
+   (for i from 0)
+   (for pstr = (mem-aref ptr :pointer i))
+   (while (not (null-pointer-p pstr)))
+   (collect (convert-from-foreign pstr :string))))

@@ -4,7 +4,7 @@
   ())
 
 (defcstruct* target-entry
-  (target :string)
+    (target :string)
   (flags :uint)
   (info :uint))
 
@@ -13,7 +13,7 @@
 
 (defmethod gconstructor ((target-entry target-entry)
                          &key new-struct target flags info
-                         &allow-other-keys)
+                           &allow-other-keys)
   (if new-struct
       (gtk-target-entry-new target flags info)
       (call-next-method)))
@@ -22,4 +22,3 @@
 
 (defmethod free-struct ((class (eql 'target-entry)) ptr)
   (gtk-target-entry-free ptr))
-  

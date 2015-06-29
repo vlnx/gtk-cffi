@@ -12,7 +12,7 @@
 (defmethod gconstructor ((file-chooser-dialog file-chooser-dialog)
                          &key (title "") dialog-parent action &allow-other-keys)
   (gtk-file-chooser-dialog-new
-   title dialog-parent action 
+   title dialog-parent action
    "gtk-cancel" :cancel
    (case action
      ((:open :select-folder) "gtk-open")

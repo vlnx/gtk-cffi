@@ -13,38 +13,38 @@
 (defmethod gconstructor ((builder builder) &key &allow-other-keys)
   (gtk-builder-new))
 
-(defcfun gtk-builder-add-from-file :uint 
+(defcfun gtk-builder-add-from-file :uint
   (builder pobject) (filename :string) (g-error :pointer))
 
-(defcfun gtk-builder-add-from-string :uint 
-  (builder pobject) (string :string) (length gsize) 
+(defcfun gtk-builder-add-from-string :uint
+  (builder pobject) (string :string) (length gsize)
   (g-error :pointer))
 
-(defcfun gtk-builder-add-objects-from-file :uint 
-  (builder pobject) (filename :string) (object-ids string-list) 
+(defcfun gtk-builder-add-objects-from-file :uint
+  (builder pobject) (filename :string) (object-ids string-list)
   (g-error :pointer))
 
-(defcfun gtk-builder-add-objects-from-string :uint 
-  (builder pobject) (string :string) (length gsize) (object-ids string-list) 
+(defcfun gtk-builder-add-objects-from-string :uint
+  (builder pobject) (string :string) (length gsize) (object-ids string-list)
   (g-error :pointer))
 
 (defgeneric add-from (builder &key filename string objects)
-  (:method 
-   ((builder builder) &key filename string objects)
-   (with-g-error g-error
-     (when 
-         (= 0 
-            (if filename
-                (if objects
-                    (gtk-builder-add-objects-from-file builder filename 
-                                                       objects g-error)
-                    (gtk-builder-add-from-file builder filename g-error))
-                (if objects
-                    (gtk-builder-add-objects-from-string 
-                     builder string (length string) objects g-error)
-                    (gtk-builder-add-from-string 
-                     builder string (length string) g-error))))
-       (throw-g-error g-error)))))
+  (:method
+      ((builder builder) &key filename string objects)
+    (with-g-error g-error
+      (when
+          (= 0
+             (if filename
+                 (if objects
+                     (gtk-builder-add-objects-from-file builder filename
+                                                        objects g-error)
+                     (gtk-builder-add-from-file builder filename g-error))
+                 (if objects
+                     (gtk-builder-add-objects-from-string
+                      builder string (length string) objects g-error)
+                     (gtk-builder-add-from-string
+                      builder string (length string) g-error))))
+        (throw-g-error g-error)))))
 
 (defcfun gtk-builder-connect-signals-full :void
   (builder pobject) (func pfunction) (user-data :pointer))
@@ -55,31 +55,31 @@
                                   (user-data :pointer))
   (declare (ignore builder user-data connect-object))
   (connect object (eval (read-from-string handler))
-           :signal signal-name 
+           :signal signal-name
            :after (not (null (find :after flags)))
            :swapped (not (null (find :swapped flags)))))
 
-(defgeneric connect-signals (builder &key func) 
+(defgeneric connect-signals (builder &key func)
   (:method ((builder builder) &key func)
-    (gtk-builder-connect-signals-full builder 
+    (gtk-builder-connect-signals-full builder
                                       (or func (callback cb-find-defun))
                                       (null-pointer))))
 
 
 (deffuns builder
-  (:get object pobject (name :string))
+    (:get object pobject (name :string))
   (:get objects (g-slist :elt pobject))
   (:get type-from-name g-type (type-name :string)))
 
 (defslots builder
-  translation-domain :string)
+    translation-domain :string)
 
-(defcfun gtk-builder-value-from-string :boolean 
-  (builder pobject) (pspec pobject) (string :string) (value pobject) 
+(defcfun gtk-builder-value-from-string :boolean
+  (builder pobject) (pspec pobject) (string :string) (value pobject)
   (g-error :pointer))
 
-(defcfun gtk-builder-value-from-string-type :boolean 
-  (builder pobject) (g-type g-type) (string :string) (value pobject) 
+(defcfun gtk-builder-value-from-string-type :boolean
+  (builder pobject) (g-type g-type) (string :string) (value pobject)
   (g-error :pointer))
 
 (defgeneric value-from-string (builder &key g-type param-spec string)
@@ -93,10 +93,3 @@
                                                         value g-error))
           (throw-g-error g-error)))
       value)))
-                   
-        
-
-
-
-  
-        

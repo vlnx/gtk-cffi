@@ -13,11 +13,9 @@
 (defcenum scrollable-policy (:minimum 0) :natural)
 
 (defslots scrollable
-  hadjustment pobject
-  vadjustment pobject
-  hscroll-policy scrollable-policy
-  vscroll-policy scrollable-policy)
+    hadjustment pobject
+    vadjustment pobject
+    hscroll-policy scrollable-policy
+    vscroll-policy scrollable-policy)
 
 (init-slots scrollable)
-  
-  

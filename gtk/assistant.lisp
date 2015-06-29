@@ -14,13 +14,13 @@
   (gtk-assistant-new))
 
 (defslots assistant
-  current-page :int)
+    current-page :int)
 
 (defcenum assistant-page-type
   :content :intro :confirm :summary :progress :custom)
 
 (deffuns assistant
-  (:get n-pages :int)
+    (:get n-pages :int)
   (:get nth-page pobject (page-num :int))
   (prepend-page :int (page pobject))
   (append-page :int (page pobject))
@@ -38,7 +38,7 @@
   (commit :void)
   (next-page :void)
   (previous-page :void))
-  
+
 
 (defcallback cb-forward-page-func :int ((cur-page :int) (data pdata))
   (funcall data cur-page))
@@ -47,9 +47,9 @@
   (assistant pobject) (func pfunction) (data pdata) (notify pfunction))
 
 
-(defmethod (setf forward-page-func) (func (assistant assistant) 
+(defmethod (setf forward-page-func) (func (assistant assistant)
                                      &key data destroy-notify)
   (set-callback assistant gtk-assistant-set-forward-page-func
                 cb-forward-page-func func data destroy-notify))
-      
+
 (init-slots assistant)

@@ -15,14 +15,14 @@
   (gtk-progress-bar-new))
 
 (defslots progress-bar
-  fraction :double
-  inverted :boolean
-  show-text :boolean
-  ellipsize pango-cffi:ellipsize-mode
-  pulse-step :double)
+    fraction :double
+    inverted :boolean
+    show-text :boolean
+    ellipsize pango-cffi:ellipsize-mode
+    pulse-step :double)
 
 (deffuns progress-bar
-  (:get text :string &key)
+    (:get text :string &key)
   (:set text :string &key)
   (pulse :void))
 

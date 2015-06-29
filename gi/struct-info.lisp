@@ -6,7 +6,7 @@
 (defctype gsize g-type)
 
 (deffuns struct-info
-  (:get n-fields :int)
+    (:get n-fields :int)
   (:get field (object field-info) (n :int))
   (:get n-methods :int)
   (get-method (object function-info) (n :int))
@@ -21,4 +21,3 @@
 
 (list-builder fields n-fields field)
 (list-builder methods n-methods get-method)
-

@@ -9,10 +9,10 @@
 (defclass actionable (object)
   ())
 
-#+gtk3.4 
+#+gtk3.4
 (defslots actionable
-  action-name :string
-  action-target-value variant)
+    action-name :string
+    action-target-value variant)
 
 #+gtk3.4
 (deffuns actionable
@@ -20,7 +20,3 @@
 
 #+gtk3.4
 (init-slots actionable)
-  
-  
-  
-

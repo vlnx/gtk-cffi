@@ -23,34 +23,34 @@
   (gtk-window-new type))
 
 (defslots window
-  title :string
-  role :string
-  resizable :boolean
-  modal :boolean
-  gravity gravity
-  transient-for pobject
-  destroy-with-parent :boolean
-  focus pobject
-  decorated :boolean
-  deletable :boolean
-  mnemonic-modifier modifier-type
-  type-hint window-type-hint
-  skip-taskbar-hint :boolean
-  skip-pager-hint :boolean
-  urgency-hint :boolean
-  accept-focus :boolean
-  focus-on-map :boolean
-;  default-icon-list g-list-object
-;  default-icon-name :string
-  icon pobject
-  icon-list g-list-object
-  icon-name :string
-  opacity :double
-  mnemonics-visible :boolean
-  #+gtk3.2 focus-visible #+gtk3.2 :boolean
-  has-resize-grip :boolean
-  application pobject
-  screen pobject)
+    title :string
+    role :string
+    resizable :boolean
+    modal :boolean
+    gravity gravity
+    transient-for pobject
+    destroy-with-parent :boolean
+    focus pobject
+    decorated :boolean
+    deletable :boolean
+    mnemonic-modifier modifier-type
+    type-hint window-type-hint
+    skip-taskbar-hint :boolean
+    skip-pager-hint :boolean
+    urgency-hint :boolean
+    accept-focus :boolean
+    focus-on-map :boolean
+                                        ;  default-icon-list g-list-object
+                                        ;  default-icon-name :string
+    icon pobject
+    icon-list g-list-object
+    icon-name :string
+    opacity :double
+    mnemonics-visible :boolean
+    #+gtk3.2 focus-visible #+gtk3.2 :boolean
+    has-resize-grip :boolean
+    application pobject
+    screen pobject)
 
 (defcfun gtk-window-set-icon-from-file :boolean
   (window pobject) (filename cffi-pathname) (g-error object))
@@ -64,16 +64,16 @@
         (gtk-window-set-icon-from-file window value g-error)
       (cerror "Continue" "Window icon load error: ~a" g-error))))
 
-  
+
 
 (defcfun gtk-window-set-default-size
-  :void (window pobject) (w :int) (h :int))
+    :void (window pobject) (w :int) (h :int))
 
 (defcfun gtk-window-get-default-size
-  :void (window pobject) (w :pointer) (h :pointer))
+    :void (window pobject) (w :pointer) (h :pointer))
 
 (defcfun gtk-window-set-default-geometry
-  :void (window pobject) (w :int) (h :int))
+    :void (window pobject) (w :int) (h :int))
 
 (defgeneric (setf default-size) (coords window &key geometry &allow-other-keys)
   (:method (coords (window window) &key geometry &allow-other-keys)
@@ -85,7 +85,7 @@
 (defgeneric default-size (window)
   (:method ((window window))
     (with-foreign-outs-list ((width :int) (height :int)) :ignore
-      (gtk-window-get-default-size window width height))))
+                            (gtk-window-get-default-size window width height))))
 
 
 (defcenum position
@@ -96,7 +96,7 @@
   :center-on-parent)
 
 (deffuns window
-  (:set (position-type . position) position)
+    (:set (position-type . position) position)
   (add-accel-group :void (accel-group pobject))
   (remove-accel-group :void (accel-group pobject))
   (activate-focus :boolean)
@@ -125,10 +125,10 @@
   (unfullscreen :void)
   (:set keep-above :boolean)
   (:set keep-below :boolean)
-  (begin-resize-drag :void (edge window-edge) (button :int) (root-x :int) 
-                    (root-y :int) (timestamp :uint32))
-  (begin-move-drag :void  (button :int) (root-x :int) 
-                    (root-y :int) (timestamp :uint32))
+  (begin-resize-drag :void (edge window-edge) (button :int) (root-x :int)
+                     (root-y :int) (timestamp :uint32))
+  (begin-move-drag :void  (button :int) (root-x :int)
+                   (root-y :int) (timestamp :uint32))
   (:get window-type window-type &key)
   (parse-geometry :boolean (geometry :string))
   (reshow-with-initial-size :void)
@@ -137,8 +137,8 @@
   (:get group pobject)
   (has-group :boolean)
   (:set startup-id :string))
-  
-(defcfun gtk-window-get-resize-grip-area :boolean 
+
+(defcfun gtk-window-get-resize-grip-area :boolean
   (window pobject) (rect (struct rectangle :out t)))
 
 (defgeneric resize-grip-area (window)
@@ -147,13 +147,13 @@
       (when (gtk-window-get-resize-grip-area window dest)
         dest))))
 
-(defcfun gtk-window-get-position :void (window pobject) 
+(defcfun gtk-window-get-position :void (window pobject)
          (x :pointer) (y :pointer))
 
 (defgeneric window-position (window)
   (:method ((window window))
     (with-foreign-outs-list ((x :int) (y :int)) :ignore
-      (gtk-window-get-position window x y))))
+                            (gtk-window-get-position window x y))))
 
 (defcfun gtk-window-move :void (window pobject) (x :int) (y :int))
 
@@ -162,13 +162,13 @@
     (destructuring-bind (x y) coords
       (gtk-window-move window x y))))
 
-(defcfun gtk-window-get-size :void (window pobject) 
+(defcfun gtk-window-get-size :void (window pobject)
          (width :pointer) (height :pointer))
 
-(defcfun gtk-window-resize :void (window pobject) 
+(defcfun gtk-window-resize :void (window pobject)
          (width :int) (height :int))
 
-(defcfun gtk-window-resize-to-geometry :void (window pobject) 
+(defcfun gtk-window-resize-to-geometry :void (window pobject)
          (width :int) (height :int))
 
 (defgeneric (setf window-size) (coords window &key geometry &allow-other-keys)
@@ -181,10 +181,10 @@
 (defgeneric window-size (window)
   (:method ((window window))
     (with-foreign-outs-list ((width :int) (height :int)) :ignore
-      (gtk-window-get-size window width height))))
+                            (gtk-window-get-size window width height))))
 
 (defcfun gtk-window-set-default-icon :void (icon pobject))
-(defcfun gtk-window-set-default-icon-from-file :boolean 
+(defcfun gtk-window-set-default-icon-from-file :boolean
   (filename cffi-pathname) (g-error object))
 (defgeneric (setf default-icon) (icon)
   (:method ((icon string))
@@ -208,9 +208,8 @@
 
 
 (init-slots window ((width -1) (height -1) geometry resize)
-  (when (or (/= width -1) (/= height -1))
-    (let ((sizes (list width height)))
-      (if resize
-          (setf (window-size window :geometry geometry) sizes)
-          (setf (default-size window :geometry geometry) sizes)))))
-
+            (when (or (/= width -1) (/= height -1))
+              (let ((sizes (list width height)))
+                (if resize
+                    (setf (window-size window :geometry geometry) sizes)
+                    (setf (default-size window :geometry geometry) sizes)))))

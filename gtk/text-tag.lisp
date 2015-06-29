@@ -10,14 +10,14 @@
   ())
 
 (defgtkslot text-tag priority :int)
-(defgtkfun event :boolean text-tag 
+(defgtkfun event :boolean text-tag
            (event-object pobject) (event pobject) (text-iter pobject))
 
 (defcenum wrap-mode
   :none :char :word :word-char)
 
 (defcstruct* text-appearance
-  (bg-color pcolor)
+    (bg-color pcolor)
   (fg-color pcolor)
   (rise :int)
   (bitfield :unsigned-char))
@@ -28,10 +28,10 @@
   (draw-bg :boolean 1)
   (inside-selection :boolean 1)
   (is-text :boolean 1))
-  
+
 
 (defcstruct* text-attributes
-  (appearance (:struct text-appearance))
+    (appearance (:struct text-appearance))
   (justification justification)
   (direction text-direction)
   (text-attributes-font pango-cffi:font)
@@ -53,7 +53,7 @@
   (editable :boolean 1))
 
 (defgtkfuns text-attributes
-  (ref (object text-attributes))
+    (ref (object text-attributes))
   (unref :void))
 
 (defcfun gtk-text-attributes-new :pointer)
@@ -63,5 +63,3 @@
 
 (defmethod free-struct ((class (eql 'text-attributes)) value)
   (unref value))
-
-

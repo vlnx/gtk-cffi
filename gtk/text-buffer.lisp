@@ -10,12 +10,12 @@
 
 (defcfun gtk-text-tag-table-new :pointer)
 
-(defmethod gconstructor ((text-tag-table text-tag-table) &key 
-                         &allow-other-keys)
+(defmethod gconstructor ((text-tag-table text-tag-table) &key
+                                                           &allow-other-keys)
   (gtk-text-tag-table-new))
 
 (deffuns text-tag-table
-  (add :void (tag pobject))
+    (add :void (tag pobject))
   ((text-tag-table-remove . remove) :void (tag pobject))
   (lookup pobject (name :string))
   (:get size :int))
@@ -23,7 +23,7 @@
 (make-foreach text-tag-table (tag (object text-tag)) (data pdata))
 
 (defcstruct* text-iter
-  (u1 :pointer)
+    (u1 :pointer)
   (u2 :pointer)
   (u3 :int)
   (u4 :int)
@@ -38,24 +38,24 @@
   (u13 :int)
   (u14 :pointer))
 
-;(defcfun gtk-text-iter-free :void (iter pobject))
+                                        ;(defcfun gtk-text-iter-free :void (iter pobject))
 
-;(defmethod free-struct ((class (eql 'text-iter)) value)
-;  (gtk-text-iter-free value))
+                                        ;(defmethod free-struct ((class (eql 'text-iter)) value)
+                                        ;  (gtk-text-iter-free value))
 
 (defslots text-iter
-  line :int
-  offset :int
-  line-offset :int
-  line-index :int
-  visible-line-index :int
-  visible-line-offset :int)
+    line :int
+    offset :int
+    line-offset :int
+    line-index :int
+    visible-line-index :int
+    visible-line-offset :int)
 
 (defbitfield text-search-flags
   :visible-only :text-only :case-insensitive)
 
 (deffuns text-iter
-  ((text-iter-char . get-char) unichar)
+    ((text-iter-char . get-char) unichar)
   (:get slice :string (end pobject))
   ((text-iter-text . get-text) :string (end pobject))
   (:get visible-slice :string (end pobject))
@@ -121,11 +121,11 @@
   (forward-to-line-end :boolean)
   (forward-to-tag-toggle :boolean (tag pobject))
   (backward-to-tag-toggle :boolean (tag pobject))
-  (forward-search :boolean 
+  (forward-search :boolean
                   (str :string) (flags text-search-flags)
                   (match-start (struct text-iter :out t))
                   (match-end (struct text-iter :out t)) (limit pobject))
-  (backward-search :boolean 
+  (backward-search :boolean
                    (str :string) (flags text-search-flags)
                    (match-start (struct text-iter :out t))
                    (match-end (struct text-iter :out t)) (limit pobject))
@@ -137,29 +137,29 @@
 (defcallback cb-char-predicate :boolean ((ch unichar) (data :pointer))
   (funcall *callback* ch data))
 
-(defcfun gtk-text-iter-forward-find-char :boolean 
-  (text-iter pobject) (pred pfunction) (data (pdata :free-to-foreign t)) 
+(defcfun gtk-text-iter-forward-find-char :boolean
+  (text-iter pobject) (pred pfunction) (data (pdata :free-to-foreign t))
   (limit pobject))
 
 (defgeneric forward-find-char (text-iter pred &key data limit)
   (:method ((text-iter text-iter) pred &key data limit)
     (if (functionp pred)
         (let ((*callback* pred))
-          (gtk-text-iter-forward-find-char text-iter 
-                                           (callback cb-char-predicate) 
+          (gtk-text-iter-forward-find-char text-iter
+                                           (callback cb-char-predicate)
                                            data limit))
         (gtk-text-iter-forward-find-char text-iter pred data limit))))
 
-(defcfun gtk-text-iter-backward-find-char :boolean 
-  (text-iter pobject) (pred pfunction) (data (pdata :free-to-foreign t)) 
+(defcfun gtk-text-iter-backward-find-char :boolean
+  (text-iter pobject) (pred pfunction) (data (pdata :free-to-foreign t))
   (limit pobject))
 
 (defgeneric backward-find-char (text-iter pred &key data limit)
   (:method ((text-iter text-iter) pred &key data limit)
     (if (functionp pred)
         (let ((*callback* pred))
-          (gtk-text-iter-backward-find-char text-iter 
-                                            (callback cb-char-predicate) 
+          (gtk-text-iter-backward-find-char text-iter
+                                            (callback cb-char-predicate)
                                             data limit))
         (gtk-text-iter-backward-find-char text-iter pred data limit))))
 
@@ -175,7 +175,7 @@
   (gtk-text-buffer-new tag-table))
 
 (defslots text-buffer
-  modified :boolean)
+    modified :boolean)
 
 (defcenum text-buffer-target-info
   (:buffer-content -1)
@@ -183,13 +183,13 @@
   (:info-text -3))
 
 (deffuns text-buffer
-  (:get line-count :int)
+    (:get line-count :int)
   (:get char-count :int)
   (:get tag-table pobject)
   (insert-pixbuf :void (text-iter pobject) (pixbuf pobject))
   (insert-child-anchor :void (text-iter pobject) (child-anchor pobject))
   (create-child-anchor pobject (text-iter pobject))
-  (create-mark pobject (mark-name :string) (where (struct text-iter)) 
+  (create-mark pobject (mark-name :string) (where (struct text-iter))
                (left-gravity :boolean))
   (add-mark :void &key (mark pobject) (where (struct text-iter)))
   (:get mark pobject (name :string))
@@ -198,11 +198,11 @@
   (:get has-selection :boolean)
   (place-cursor :void (where (struct text-iter)))
   (select-range :void (ins (struct text-iter)) (bound (struct text-iter)))
-  (remove-all-tags :void 
+  (remove-all-tags :void
                    (start (struct text-iter)) (end (struct text-iter)))
-  (delete-selection :boolean &key (interactive :boolean) 
+  (delete-selection :boolean &key (interactive :boolean)
                     (default-editable :boolean))
-  (paste-clipboard :void &key (clipboard pobject) (location pobject) 
+  (paste-clipboard :void &key (clipboard pobject) (location pobject)
                    (default-editable :boolean))
   (copy-clipboard :void &key (clipboard pobject))
   (cut-clipboard :void &key (clipboard pobject) (default-editable :boolean))
@@ -210,7 +210,7 @@
   (end-user-action :void)
   (add-selection-clipboard :void (clipboard pobject))
   (remove-selection-clipboard :void (clipboard pobject))
-  ((deserialize-can-create-tags . deserialize-get-can-create-tags) 
+  ((deserialize-can-create-tags . deserialize-get-can-create-tags)
    :boolean (format gatom))
   (:get copy-target-list (object target-list))
   (:get paste-target-list (object target-list))
@@ -226,35 +226,35 @@
   (:method (value (text-buffer text-buffer) format)
     (gtk-text-buffer-deserialize-set-can-create-tags text-buffer format value)))
 
-(defcfun gtk-text-buffer-get-start-iter :void 
+(defcfun gtk-text-buffer-get-start-iter :void
   (buffer pobject) (text-iter (struct text-iter :out t)))
 
 (defgeneric start-iter (text-buffer &optional text-iter)
-  (:method ((text-buffer text-buffer) 
+  (:method ((text-buffer text-buffer)
             &optional (text-iter (make-instance 'text-iter)))
     (gtk-text-buffer-get-start-iter text-buffer text-iter)
     text-iter))
 
-(defcfun gtk-text-buffer-get-end-iter :void 
+(defcfun gtk-text-buffer-get-end-iter :void
   (buffer pobject) (text-iter (struct text-iter :out t)))
 
 (defgeneric end-iter (text-buffer &optional text-iter)
-  (:method ((text-buffer text-buffer) 
+  (:method ((text-buffer text-buffer)
             &optional (text-iter (make-instance 'text-iter)))
     (gtk-text-buffer-get-end-iter text-buffer text-iter)
     text-iter))
 
 (defcfun gtk-text-buffer-get-text :string (buffer pobject)
-  (start pobject) (end pobject) (include-hidden :boolean))
+         (start pobject) (end pobject) (include-hidden :boolean))
 
-(defmethod text ((text-buffer text-buffer) &key 
-                 (start (start-iter text-buffer)) 
-                 (end (end-iter text-buffer)) include-hidden)
-;  (format t "got text (~a ~a ~a)~%" text-buffer start end)
+(defmethod text ((text-buffer text-buffer) &key
+                                             (start (start-iter text-buffer))
+                                             (end (end-iter text-buffer)) include-hidden)
+                                        ;  (format t "got text (~a ~a ~a)~%" text-buffer start end)
   (gtk-text-buffer-get-text text-buffer start end include-hidden))
 
 (defcfun gtk-text-buffer-set-text :void (buffer pobject)
-  (str :string) (length :int))
+         (str :string) (length :int))
 
 (defmethod (setf text) (text (text-buffer text-buffer) &key (length -1))
   (gtk-text-buffer-set-text text-buffer text length))
@@ -265,41 +265,41 @@
          (text :string) (len :int))
 (defcfun gtk-text-buffer-insert-at-cursor :void (buffer pobject)
          (text :string) (len :int))
-(defcfun gtk-text-buffer-insert-interactive :boolean (buffer pobject) 
-         (iter pobject) (text :string) (len :int) 
+(defcfun gtk-text-buffer-insert-interactive :boolean (buffer pobject)
+         (iter pobject) (text :string) (len :int)
          (default-editable :boolean))
 (defcfun gtk-text-buffer-insert-interactive-at-cursor :boolean (buffer pobject)
          (text :string) (len :int) (default-editable :boolean))
 
-(defgeneric insert (text-buffer place text 
-                                &key length interactive default-editable))
+(defgeneric insert (text-buffer place text
+                    &key length interactive default-editable))
 
-(defmethod insert ((text-buffer text-buffer) (text-iter (eql :at-cursor)) 
+(defmethod insert ((text-buffer text-buffer) (text-iter (eql :at-cursor))
                    text &key (length -1) interactive default-editable)
   (if interactive
-      (gtk-text-buffer-insert-interactive-at-cursor text-buffer text 
+      (gtk-text-buffer-insert-interactive-at-cursor text-buffer text
                                                     length default-editable)
       (gtk-text-buffer-insert-at-cursor text-buffer text length)))
-  
-(defmethod insert ((text-buffer text-buffer) text-iter text 
+
+(defmethod insert ((text-buffer text-buffer) text-iter text
                    &key (length -1) interactive default-editable)
   (if interactive
-      (gtk-text-buffer-insert-interactive text-buffer text-iter text 
+      (gtk-text-buffer-insert-interactive text-buffer text-iter text
                                           length default-editable)
       (gtk-text-buffer-insert text-buffer text-iter text length)))
 
-(defcfun gtk-text-buffer-insert-range :void 
-  (buffer pobject) (text-iter pobject) 
+(defcfun gtk-text-buffer-insert-range :void
+  (buffer pobject) (text-iter pobject)
   (start (struct text-iter)) (end (struct text-iter)))
 
 (defcfun gtk-text-buffer-insert-range-interactive :boolean
-  (buffer pobject) (text-iter pobject) (start (struct text-iter)) 
+  (buffer pobject) (text-iter pobject) (start (struct text-iter))
   (end (struct text-iter)) (default-editable :boolean))
 
 
-(defgeneric insert-range (text-buffer text-iter start end 
-                                      &key interactive default-editable)
-  (:method ((text-buffer text-buffer) text-iter start end 
+(defgeneric insert-range (text-buffer text-iter start end
+                          &key interactive default-editable)
+  (:method ((text-buffer text-buffer) text-iter start end
             &key interactive default-editable)
     (if interactive
         (gtk-text-buffer-insert-range-interactive text-buffer text-iter
@@ -307,14 +307,14 @@
         (gtk-text-buffer-insert-range text-buffer text-iter start end))))
 
 
-(defcfun gtk-text-buffer-delete :void 
+(defcfun gtk-text-buffer-delete :void
   (buffer pobject) (start pobject) (end pobject))
 
 (defcfun gtk-text-buffer-delete-interactive :boolean
   (buffer pobject) (start pobject) (end pobject) (default-editable :boolean))
 
-(defgeneric text-buffer-delete (text-buffer start end 
-                                            &key interactive default-editable)
+(defgeneric text-buffer-delete (text-buffer start end
+                                &key interactive default-editable)
   (:method ((text-buffer text-buffer) start end
             &key interactive default-editable)
     (if interactive
@@ -322,23 +322,23 @@
                                             start end default-editable)
         (gtk-text-buffer-delete text-buffer start end))))
 
-(defcfun gtk-text-buffer-backspace :boolean                  
+(defcfun gtk-text-buffer-backspace :boolean
   (buffer pobject) (text-iter pobject) (interactive :boolean)
   (default-editable :boolean))
 
 (defgeneric backspace (text-buffer text-iter &key interactive default-editable)
-  (:method ((text-buffer text-buffer) text-iter 
+  (:method ((text-buffer text-buffer) text-iter
             &key interactive default-editable)
-    (gtk-text-buffer-backspace text-buffer text-iter 
+    (gtk-text-buffer-backspace text-buffer text-iter
                                interactive default-editable)))
 
 (defcfun gtk-text-buffer-get-slice :string (buffer pobject)
          (start pobject) (end pobject) (include-hidden :boolean))
 
 (defgeneric text-buffer-slice (text-buffer &key start end)
-  (:method ((text-buffer text-buffer) &key 
-            (start (start-iter text-buffer)) 
-            (end (end-iter text-buffer)) include-hidden)
+  (:method ((text-buffer text-buffer) &key
+                                        (start (start-iter text-buffer))
+                                        (end (end-iter text-buffer)) include-hidden)
     (gtk-text-buffer-get-slice text-buffer start end include-hidden)))
 
 (macrolet ((by-name-accessor (name tag-name &rest params)
@@ -351,27 +351,27 @@
                   (defcfun ,by-name :void
                     (buffer pobject) (,tag-name :string) ,@params)
                   (defgeneric ,name (text-buffer ,tag-name ,@cars-params)
-                    (:method ((text-buffer text-buffer) (,tag-name string) 
+                    (:method ((text-buffer text-buffer) (,tag-name string)
                               ,@cars-params)
                       (,by-name text-buffer ,tag-name ,@cars-params))
-                    (:method ((text-buffer text-buffer) ,tag-name 
+                    (:method ((text-buffer text-buffer) ,tag-name
                               ,@cars-params)
                       (check-type ,tag-name (or foreign-pointer object))
                       (,by-obj text-buffer ,tag-name ,@cars-params)))))))
-             
+
   (by-name-accessor move-mark mark (where (struct text-iter)))
   (by-name-accessor delete-mark mark (where (struct text-iter)))
   (by-name-accessor apply-tag tag
                     (start (struct text-iter)) (end (struct text-iter)))
   (by-name-accessor remove-tag tag
                     (start (struct text-iter)) (end (struct text-iter))))
-  
+
 (defcfun gtk-text-buffer-create-tag :pointer (buffer pobject)
          (name :string) (null :pointer))
 
 (defgeneric create-tag (text-buffer name &rest properties)
   (:method ((text-buffer text-buffer) name &rest properties)
-    (let ((res (make-instance 
+    (let ((res (make-instance
                 'text-tag :pointer
                 (gtk-text-buffer-create-tag text-buffer name (null-pointer)))))
       (setf (properties res) properties))))
@@ -391,9 +391,9 @@
   (buffer pobject) (text-iter pobject) (child-anchor pobject))
 
 
-(defgeneric text-buffer-iter (text-buffer text-iter 
-                                          &key line offset index 
-                                          mark child-anchor)
+(defgeneric text-buffer-iter (text-buffer text-iter
+                              &key line offset index
+                                mark child-anchor)
   (:documentation "Sets the TEXT-ITER to given position:
 priority is CHILD-ANCHOR, MARK, LINE+INDEX, LINE+OFFSET, LINE, OFFSET
 OFFSET may be also :start or :end, the sama as 0 and -1")
@@ -402,28 +402,28 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
     (unless text-iter
       (setf text-iter (make-instance 'text-iter)))
     (cond
-      (child-anchor 
-       (gtk-text-buffer-get-iter-at-child-anchor text-buffer 
+      (child-anchor
+       (gtk-text-buffer-get-iter-at-child-anchor text-buffer
                                                  text-iter child-anchor))
       (mark
        (gtk-text-buffer-get-iter-at-mark text-buffer text-iter mark))
       (line
        (cond
-         (index (gtk-text-buffer-get-iter-at-line-index text-buffer 
+         (index (gtk-text-buffer-get-iter-at-line-index text-buffer
                                                         text-iter line index))
-         (offset (gtk-text-buffer-get-iter-at-line-offset text-buffer 
-                                                          text-iter 
+         (offset (gtk-text-buffer-get-iter-at-line-offset text-buffer
+                                                          text-iter
                                                           line offset))
          (t (gtk-text-buffer-get-iter-at-line text-buffer text-iter line))))
-      (t 
+      (t
        (case offset
          ((0 :start) (gtk-text-buffer-get-start-iter text-buffer text-iter))
          ((-1 :end) (gtk-text-buffer-get-end-iter text-buffer text-iter))
-         (t (gtk-text-buffer-get-iter-at-offset text-buffer 
+         (t (gtk-text-buffer-get-iter-at-offset text-buffer
                                                 text-iter offset)))))
     text-iter))
 
-(defcfun gtk-text-buffer-get-bounds :void 
+(defcfun gtk-text-buffer-get-bounds :void
   (buffer pobject) (start pobject) (end pobject))
 
 (defgeneric bounds (text-buffer &key start end)
@@ -433,7 +433,7 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
       (gtk-text-buffer-get-bounds text-buffer start end)
       (values start end))))
 
-(defcfun gtk-text-buffer-get-selection-bounds :void 
+(defcfun gtk-text-buffer-get-selection-bounds :void
   (buffer pobject) (start pobject) (end pobject))
 
 (defmethod selection-bounds ((text-buffer text-buffer) &key start end)
@@ -442,18 +442,18 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
     (let ((res (gtk-text-buffer-get-selection-bounds text-buffer start end)))
       (values res start end))))
 
-(defcfun gtk-text-buffer-deserialize :boolean 
-  (register-buffer pobject) (content-buffer pobject) (format gatom) 
-  (text-iter pobject) (data (garray :uint8)) (length :int) 
+(defcfun gtk-text-buffer-deserialize :boolean
+  (register-buffer pobject) (content-buffer pobject) (format gatom)
+  (text-iter pobject) (data (garray :uint8)) (length :int)
   (err :pointer))
 
-(define-condition deserialize-warning (warning) 
+(define-condition deserialize-warning (warning)
   ((g-error :initarg g-error))
   (:report (lambda (condition stream)
              (format stream "GError: ~a" (slot-value condition 'g-error)))))
 
 (defgeneric deserialize (register-buffer content-buffer format text-iter data)
-  (:method ((register-buffer text-buffer) (content-buffer text-buffer) 
+  (:method ((register-buffer text-buffer) (content-buffer text-buffer)
             format text-iter data)
     (with-g-error g-error
       (gtk-text-buffer-deserialize register-buffer content-buffer format
@@ -484,7 +484,7 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
   (user-data pdata) (user-data-destroy pfunction))
 
 (defcallback cb-serialize (garray :uint8)
-    ((register-buffer pobject) (content-buffer pobject) 
+    ((register-buffer pobject) (content-buffer pobject)
      (start (struct text-iter)) (end (struct text-iter)) (size :pointer)
      (user-data pdata))
   (destructuring-bind (func data data-destroy) user-data
@@ -493,7 +493,7 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
       (setf (mem-ref size :int) (length res))
       res)))
 
-(defcallback cb-serialize-destroy :void 
+(defcallback cb-serialize-destroy :void
     ((user-data pdata :free-from-foreign t))
   (destructuring-bind (func data data-destroy) user-data
     (declare (ignore func))
@@ -503,36 +503,36 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
     ((register-buffer pobject) (content-buffer pobject)
      (iter (object text-buffer)) ;; object saves pointer, struct -- doesn't
      (array-data :pointer) (length :ulong)
-     (create-tags :boolean) (user-data pdata) 
+     (create-tags :boolean) (user-data pdata)
      (g-error :pointer))
   (destructuring-bind (func data data-destroy) user-data
     (declare (ignore data-destroy))
-    (funcall func register-buffer content-buffer iter 
+    (funcall func register-buffer content-buffer iter
              (progn
                (setf (mem-ref *array-length* :uint) length)
                (convert-from-foreign array-data '(garray :uint8)))
              create-tags data g-error)))
 
 
-(defgeneric register-deserialize-format (text-buffer mime-type func 
-                                                     &key data data-destroy)
+(defgeneric register-deserialize-format (text-buffer mime-type func
+                                         &key data data-destroy)
   (:method ((text-buffer text-buffer) mime-type func &key data data-destroy)
     (if (pointerp func)
         (gtk-text-buffer-register-deserialize-format text-buffer
-                                                     mime-type func 
+                                                     mime-type func
                                                      data data-destroy)
-        (gtk-text-buffer-register-deserialize-format 
+        (gtk-text-buffer-register-deserialize-format
          text-buffer mime-type (callback cb-deserialize)
          (list func data data-destroy) (callback cb-serialize-destroy)))))
-                                                     
-(defgeneric register-serialize-format (text-buffer mime-type func 
-                                                     &key data data-destroy)
+
+(defgeneric register-serialize-format (text-buffer mime-type func
+                                       &key data data-destroy)
   (:method ((text-buffer text-buffer) mime-type func &key data data-destroy)
     (if (pointerp func)
         (gtk-text-buffer-register-serialize-format text-buffer
-                                                     mime-type func 
-                                                     data data-destroy)
-        (gtk-text-buffer-register-serialize-format 
+                                                   mime-type func
+                                                   data data-destroy)
+        (gtk-text-buffer-register-serialize-format
          text-buffer mime-type (callback cb-serialize)
          (list func data data-destroy) (callback cb-serialize-destroy)))))
 
@@ -541,7 +541,7 @@ OFFSET may be also :start or :end, the sama as 0 and -1")
   (start (struct text-iter)) (end (struct text-iter)) (length :pointer))
 
 (defgeneric serialize (register-buffer content-buffer format &key start end)
-  (:method ((register-buffer text-buffer) (content-buffer text-buffer) format 
+  (:method ((register-buffer text-buffer) (content-buffer text-buffer) format
             &key start end)
     (gtk-text-buffer-serialize register-buffer content-buffer format
                                start end *array-length*)))

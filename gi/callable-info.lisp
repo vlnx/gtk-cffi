@@ -4,7 +4,7 @@
   ())
 
 (deffuns callable-info
-  (:get return-type (object type-info))
+    (:get return-type (object type-info))
   (:get caller-owns transfer)
   (may-return-null :boolean)
   (:get return-attribute :string)

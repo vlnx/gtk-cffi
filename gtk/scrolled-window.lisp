@@ -18,11 +18,11 @@
     min-content-height :int)
 
 (defgtkfuns scrolled-window
-  (unset-placement :void)
+    (unset-placement :void)
   (add-with-viewport :void (child pobject)))
 
 
-(defcfun gtk-scrolled-window-set-policy :void 
+(defcfun gtk-scrolled-window-set-policy :void
   (win pobject) (hpol policy) (vpol policy))
 
 (defgeneric (setf policy) (policy scrolled-window))
@@ -39,6 +39,6 @@
 (defgeneric policy (scrolled-window))
 (defmethod policy ((scrolled-window scrolled-window))
   (with-foreign-outs-list ((hpol 'policy) (vpol 'policy)) :ignore
-      (gtk-scrolled-window-get-policy scrolled-window hpol vpol)))
+                          (gtk-scrolled-window-get-policy scrolled-window hpol vpol)))
 
 (init-slots scrolled-window)

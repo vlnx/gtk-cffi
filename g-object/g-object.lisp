@@ -24,7 +24,7 @@
   "removes pointer from *objects*, when GObject destroyed"
   (declare (ignore data))
   (debug-out "destroying object ~a~%" g-object)
-  (free g-object)) 
+  (free g-object))
 
 (defcfun "g_object_weak_ref" :void
   (object :pointer) (notify pfunction) (data :pointer))
@@ -35,10 +35,10 @@
     (debug-out "Creating ~a ~a~%" g-object value)
     (g-object-weak-ref value (callback destroy-object) (null-pointer))))
 
-;; (defcfun "g_object_set_property" :void 
+;; (defcfun "g_object_set_property" :void
 ;;   (object pobject) (name :string) (value pobject))
 
-;; (defcfun "g_object_get_property" :void 
+;; (defcfun "g_object_get_property" :void
 ;;   (object pobject) (name :string) (value pobject))
 
 
@@ -60,26 +60,26 @@
              (error "Incorrect property name ~a" key))))
 
      ,@(when set
-        `((defcfun ,set :void 
-            (object pobject) (name cffi-keyword) (value pobject))
-          (defgeneric (setf ,name) (values ,object &rest keys)
-            (:method (values (,object ,object) &rest keys)
-              "Usage: 
+             `((defcfun ,set :void
+                 (object pobject) (name cffi-keyword) (value pobject))
+               (defgeneric (setf ,name) (values ,object &rest keys)
+                 (:method (values (,object ,object) &rest keys)
+                   "Usage:
           (setf (property object :property) value)
           (setf (property object :prop1 :prop2) (list value1 value2))"
-              (mapc (lambda (key value)
-                      (declare (type (or symbol string) key))
-                      (let ((skey (string-downcase key)))
-                        (with-g-value (:value value 
-                                       :g-type (,type ,object skey))
-                          (,set ,object skey *g-value*))))
-                    keys (if (listp values) values (list values)))))))
+                   (mapc (lambda (key value)
+                           (declare (type (or symbol string) key))
+                           (let ((skey (string-downcase key)))
+                             (with-g-value (:value value
+                                                   :g-type (,type ,object skey))
+                               (,set ,object skey *g-value*))))
+                         keys (if (listp values) values (list values)))))))
 
-     (defcfun ,get :void 
+     (defcfun ,get :void
        (object pobject) (name cffi-keyword) (value pobject))
      (defgeneric ,name (,object &rest keys))
      (defmethod ,name ((,object ,object) &rest keys)
-       "Usage 
+       "Usage
          (property object :prop1) -> value1
          (property object :prop1 :prop2 ...) -> (value1 value2 ...)"
        (funcall (lambda (x) (if (cdr x) x (car x)))
@@ -89,9 +89,9 @@
                             (,get ,object key *g-value*)))
                         keys)))))
 
-(generate-property-accessors property g-object 
+(generate-property-accessors property g-object
                              g-object-set-property g-object-get-property
-                             property-type 
+                             property-type
                              g-object-class find-property %properties)
 
 
@@ -139,14 +139,14 @@
                             (data :pointer))
   (declare (ignore hint data))
   (let ((lisp-func (find-object closure))
-        (lisp-params 
+        (lisp-params
          (iter
-           (for i from 0 below n-values)
-           (collect (value
-                     (make-instance
-                      'g-value
-                      :pointer (mem-aref
-                                params '(:struct g-value-struct) i)))))) ; will be :struct
+          (for i from 0 below n-values)
+          (collect (value
+                    (make-instance
+                     'g-value
+                     :pointer (mem-aref
+                               params '(:struct g-value-struct) i)))))) ; will be :struct
         (lisp-return (make-instance 'g-value :pointer return)))
     (let ((res (apply lisp-func lisp-params)))
       (when (/= (g-type lisp-return) 0)
@@ -162,23 +162,23 @@
     closure-ptr))
 
 
-(defcfun g-signal-handler-disconnect :void 
+(defcfun g-signal-handler-disconnect :void
   (instance pobject) (id :ulong))
 
-(defmethod connect ((g-object g-object) c-handler 
+(defmethod connect ((g-object g-object) c-handler
                     &key signal data after swapped)
   (let* ((str-signal (string-downcase signal))
          (c-handler (if (and (symbolp c-handler) (fboundp c-handler))
                         (symbol-function c-handler) c-handler))
          (handler-id
           (typecase c-handler
-            (function (g-signal-connect-closure 
+            (function (g-signal-connect-closure
                        g-object str-signal
                        (make-closure
                         (if data
                             (lambda (&rest params)
-                              (apply c-handler 
-                                     (if swapped 
+                              (apply c-handler
+                                     (if swapped
                                          (cons data params)
                                          (nconc params (list data)))))
                             c-handler))
@@ -196,7 +196,7 @@
 (defmethod (setf gsignal) (c-handler
                            (g-object g-object)
                            detailed-signal &key
-                           data after swapped)
+                                             data after swapped)
   "(SETF GSIGNAL) sets signal handler
 c-handler may be lisp function (closure)
                     OR c-pointer on function
@@ -205,11 +205,11 @@ detailed-signal may be string or keyword
 data may be c-pointer or lisp object
 after & swapped as in GTK: after = handler called after other handlers
             swapped = data and widget will be swapped in c-handler
-                      (in a lisp func data will be first arg if swapped, 
+                      (in a lisp func data will be first arg if swapped,
                        and last otherwise)
 
 If c-handler is null (or null pointer), this method removes signal.
-In this case detailed-string may be also id of the signal handler 
+In this case detailed-string may be also id of the signal handler
 being removed
 
 Returns assoc: (id-of-handler . detailed-signal)"
@@ -219,17 +219,17 @@ Returns assoc: (id-of-handler . detailed-signal)"
       (setf (gsignals g-object)
             (mapcan
              (lambda (x)
-               (if (if (numberp detailed-signal) 
+               (if (if (numberp detailed-signal)
                        (= detailed-signal (cdr x))
                        (string= (string-downcase detailed-signal) (car x)))
-                   (g-signal-handler-disconnect g-object (cdr x)) 
+                   (g-signal-handler-disconnect g-object (cdr x))
                    (list x)))
              (gsignals g-object)))
       (connect g-object c-handler
                :signal detailed-signal
                :swapped swapped :after after :data data)))
 
-    
+
 
 (defgeneric gsignal (g-object signal))
 
@@ -237,7 +237,7 @@ Returns assoc: (id-of-handler . detailed-signal)"
   "method GSIGNAL of class G-OBJECT
    returns list of IDs of setted signals"
   (mapcan (lambda (x) (when (string= (string-downcase detailed-signal) (car x))
-                        (list (cdr x)))) 
+                        (list (cdr x))))
           (gsignals g-object)))
 
 (defmethod (setf signals) (signals (g-object g-object))
@@ -261,9 +261,9 @@ identifying GTK signal."
 
 (defmethod initialize-instance :after ((g-object g-object)
                                        &key signals properties
-                                       &allow-other-keys)
+                                         &allow-other-keys)
   (setf-init g-object signals properties))
-           
+
 
 (defcfun g-object-ref :pointer (obj pobject))
 (defcfun g-object-unref :void (obj pobject))
@@ -282,7 +282,4 @@ identifying GTK signal."
   (g-object-new id (null-pointer)))
 
 (defcfun g-object-newv :pointer (class-type g-type)
-                                (n-params :uint) (params :pointer))
-
-
-         
+         (n-params :uint) (params :pointer))

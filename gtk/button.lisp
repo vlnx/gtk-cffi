@@ -1,6 +1,6 @@
 ;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
 ;;;
-;;; button.lisp --- Wrappers for GtkButton, GtkCheckButton, GtkToggleButton, 
+;;; button.lisp --- Wrappers for GtkButton, GtkCheckButton, GtkToggleButton,
 ;;;                          GtkScaleButton, GtkRadioButton, GtkVolumeButton,
 ;;;                          GtkLockButton
 ;;;
@@ -28,34 +28,34 @@
                (:mnemonic #'gtk-button-new-with-mnemonic)
                (otherwise #'gtk-button-new-with-label))))
         (funcall creator label))
-    (gtk-button-new)))
+      (gtk-button-new)))
 
 (defslots button
-  relief relief-style
-  label :string
-  use-stock :boolean
-  use-underline :boolean
-  focus-on-click :boolean
-  image pobject
-  image-position position-type)
+    relief relief-style
+    label :string
+    use-stock :boolean
+    use-underline :boolean
+    focus-on-click :boolean
+    image pobject
+    image-position position-type)
 
 (deffuns button
-  (clicked :void)
+    (clicked :void)
   (:get event-window pobject))
 
 (defcfun gtk-button-set-alignment :void (button pobject) (x :float) (y :float))
 (defmethod (setf alignment) (coords (button button))
   (gtk-button-set-alignment button
-                          (float (first coords))
-                          (float (second coords))))
+                            (float (first coords))
+                            (float (second coords))))
 (save-setter button alignment)
 
-(defcfun gtk-button-get-alignment :void 
+(defcfun gtk-button-get-alignment :void
   (button pobject) (x :pointer) (y :pointer))
 
 (defmethod alignment ((button button))
   (with-foreign-outs-list ((x :float) (y :float)) :ignore
-    (gtk-button-get-alignment button x y)))
+                          (gtk-button-get-alignment button x y)))
 
 (init-slots button)
 
@@ -72,15 +72,15 @@
       (case type
         (:mnemonic (gtk-toggle-button-new-with-mnemonic label))
         (otherwise (gtk-toggle-button-new-with-label label)))
-    (gtk-toggle-button-new)))
+      (gtk-toggle-button-new)))
 
 (defslots toggle-button
-  mode :boolean
-  active :boolean
-  inconsistent :boolean)
+    mode :boolean
+    active :boolean
+    inconsistent :boolean)
 
 (deffuns toggle-button
-  (toggled :void))
+    (toggled :void))
 
 (init-slots toggle-button)
 
@@ -97,7 +97,7 @@
       (case type
         (:mnemonic (gtk-check-button-new-with-mnemonic label))
         (otherwise (gtk-check-button-new-with-label label)))
-    (gtk-check-button-new)))
+      (gtk-check-button-new)))
 
 (defclass radio-button (check-button)
   ())
@@ -107,9 +107,9 @@
 (defcfun gtk-radio-button-new-with-mnemonic :pointer (label :string))
 
 (defcfun gtk-radio-button-new-from-widget :pointer (group-member pobject))
-(defcfun gtk-radio-button-new-with-label-from-widget :pointer 
+(defcfun gtk-radio-button-new-with-label-from-widget :pointer
   (group-member pobject) (label :string))
-(defcfun gtk-radio-button-new-with-mnemonic-from-widget :pointer 
+(defcfun gtk-radio-button-new-with-mnemonic-from-widget :pointer
   (group-member pobject) (label :string))
 
 
@@ -117,16 +117,16 @@
   (initialize radio-button '(label type widget))
   (if label
       (case type
-        (:mnemonic (if widget 
-                       (gtk-radio-button-new-with-mnemonic-from-widget 
+        (:mnemonic (if widget
+                       (gtk-radio-button-new-with-mnemonic-from-widget
                         widget label)
                        (gtk-radio-button-new-with-mnemonic label)))
-        (otherwise (if widget 
-                       (gtk-radio-button-new-with-label-from-widget widget 
+        (otherwise (if widget
+                       (gtk-radio-button-new-with-label-from-widget widget
                                                                     label)
                        (gtk-radio-button-new-with-label label))))
-      (if widget 
-          (gtk-radio-button-new-from-widget widget) 
+      (if widget
+          (gtk-radio-button-new-from-widget widget)
           (gtk-radio-button-new))))
 
 (defclass radio-group (object)
@@ -134,12 +134,12 @@
 
 (defgeneric as-list (object)
   (:method ((radio-button radio-button))
-    (convert-from-foreign (pointer radio-button) 
+    (convert-from-foreign (pointer radio-button)
                           '(g-slist :free-from-foreign nil))))
 
 (defslot radio-button group (object radio-group))
 (deffuns radio-button
-  (join-group :void (group-source pobject)))
+    (join-group :void (group-source pobject)))
 
 (init-slots radio-button)
 
@@ -157,8 +157,8 @@
       (gtk-link-button-new uri)))
 
 (defslots link-button
-  uri :string
-  visited :boolean)
+    uri :string
+    visited :boolean)
 
 (init-slots link-button)
 
@@ -171,17 +171,17 @@
   (gtk-scale-button-new))
 
 (defslots scale-button
-  adjustment pobject
-  value :double)
+    adjustment pobject
+    value :double)
 
 (deffuns scale-button
-  (:set icons (null-array :string))
+    (:set icons (null-array :string))
   (:get popup pobject)
   (:get plus-button pobject)
   (:get minus-button pobject))
 
 (init-slots scale-button)
-  
+
 (defclass volume-button (scale-button)
   ())
 

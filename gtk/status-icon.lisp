@@ -10,7 +10,7 @@
 (defcfun gtk-status-icon-new-from-gicon :pointer (gicon pobject))
 (defcfun gtk-status-icon-new :pointer)
 
-(defmethod gconstructor ((status-icon status-icon) 
+(defmethod gconstructor ((status-icon status-icon)
                          &key file pixbuf stock-id gicon icon-name)
   (cond
     (file (gtk-status-icon-new-from-file file))
@@ -20,18 +20,18 @@
     (gicon (gtk-status-icon-new-from-gicon gicon))
     (t (gtk-status-icon-new))))
 
-(defcfun gtk-status-icon-set-from-file :pointer 
+(defcfun gtk-status-icon-set-from-file :pointer
   (status-icon pobject) (filename cffi-pathname))
-(defcfun gtk-status-icon-set-from-pixbuf :pointer 
+(defcfun gtk-status-icon-set-from-pixbuf :pointer
   (status-icon pobject) (pixbuf pobject))
-(defcfun gtk-status-icon-set-from-icon-name :pointer 
+(defcfun gtk-status-icon-set-from-icon-name :pointer
   (status-icon pobject) (icon-name :string))
-(defcfun gtk-status-icon-set-from-stock :pointer 
+(defcfun gtk-status-icon-set-from-stock :pointer
   (status-icon pobject) (stock-id :string))
-(defcfun gtk-status-icon-set-from-gicon :pointer 
+(defcfun gtk-status-icon-set-from-gicon :pointer
   (status-icon pobject) (gicon pobject))
 
-(defmethod reinitialize-instance ((status-icon status-icon) 
+(defmethod reinitialize-instance ((status-icon status-icon)
                                   &key file pixbuf stock-id gicon icon-name)
   (cond
     (file (gtk-status-icon-set-from-file status-icon file))
@@ -41,15 +41,15 @@
     (gicon (gtk-status-icon-set-from-gicon status-icon gicon))))
 
 (defslots status-icon
-  screen pobject
-  tooltip-text :string
-  tooltip-markup :string
-  has-tooltip :boolean
-  title :string
-  visible :boolean)
+    screen pobject
+    tooltip-text :string
+    tooltip-markup :string
+    has-tooltip :boolean
+    title :string
+    visible :boolean)
 
 (deffuns status-icon
-  ((name . get-icon-name) :string)
+    ((name . get-icon-name) :string)
   (:set name :string)
   (is-embedded :boolean)
   (:get x11-window-id :uint32)
@@ -58,10 +58,10 @@
   (:get stock :string)
   (:get gicon pobject)
   (:get size :int))
-  
 
-(defcfun gtk-status-icon-get-geometry :boolean 
-  (status-icon pobject) (screen :pointer) (area (struct rectangle :out t)) 
+
+(defcfun gtk-status-icon-get-geometry :boolean
+  (status-icon pobject) (screen :pointer) (area (struct rectangle :out t))
   (orientation :pointer))
 
 (defgeneric geometry (status-icon)
@@ -72,7 +72,7 @@
           (list (make-instance 'screen :pointer (mem-ref screen :pointer))
                 area (mem-ref orientation 'orientation)))))))
 
-;; gtk_status_icon_position_menu can be used 
+;; gtk_status_icon_position_menu can be used
 ;; in menu-popup as :gtk-status-icon-position-menu
 
 

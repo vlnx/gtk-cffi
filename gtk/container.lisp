@@ -1,7 +1,7 @@
 (in-package :gtk-cffi)
 
 (defclass container (widget)
-  ((%child-properties :accessor %child-properties 
+  ((%child-properties :accessor %child-properties
                       :initform nil :allocation :class)))
 
 (defcenum resize-mode
@@ -27,7 +27,7 @@
 (defmacro pack* (box &rest widgets)
   `(progn
      ,@(mapcar
-        (lambda (widget) 
+        (lambda (widget)
           `(pack ,box ,@(ensure-cons widget)))
         widgets)))
 
@@ -41,8 +41,8 @@
     (pack container kid)))
 
 (defmethod initialize-instance
-  :after ((container container)
-          &key kid kids &allow-other-keys)
+    :after ((container container)
+            &key kid kids &allow-other-keys)
   (setf-init container kid kids))
 
 (defmacro pack-with-param (container token cur-param keyword-list)
@@ -55,10 +55,10 @@ Here, widget2 and widget3 will be packed with expand."
          (when param
            (setf (slot-value ,container param) ,token)))))
 
-(defcfun gtk-container-child-get-property :void 
+(defcfun gtk-container-child-get-property :void
   (container pobject) (widget pobject) (name cffi-keyword) (value pobject))
 
-(defcfun gtk-container-child-set-property :void 
+(defcfun gtk-container-child-set-property :void
   (container pobject) (widget pobject) (name cffi-keyword) (value pobject))
 
 (defgeneric child-property-type (container key))
@@ -70,7 +70,7 @@ Here, widget2 and widget3 will be packed with expand."
   "Should return GType of property KEY."
   (let ((skey (string-downcase key)))
     (or (cdr (assoc skey (%child-properties container) :test #'string=))
-        (let* ((gclass (make-instance 'g-object-cffi:g-object-class 
+        (let* ((gclass (make-instance 'g-object-cffi:g-object-class
                                       :object container))
                (prop (find-child-property gclass skey)))
           (when prop
@@ -86,7 +86,7 @@ Here, widget2 and widget3 will be packed with expand."
              (mapcar (lambda (key)
                        (with-g-value
                            (:g-type (child-property-type parent key))
-                         (gtk-container-child-get-property 
+                         (gtk-container-child-get-property
                           parent widget key *g-value*)))
                      keys)))
 
@@ -96,14 +96,14 @@ Here, widget2 and widget3 will be packed with expand."
 (defgeneric (setf child-property) (values widget parent &key keys)
   (:documentation "
 Usage: (setf (child-property object parent :property) value)
-       (setf (child-property object parent :prop1 :prop2) 
+       (setf (child-property object parent :prop1 :prop2)
              (list value1 value2))")
   (:method (values (widget widget) (parent container) &rest keys)
     (mapc (lambda (key value)
             (declare (type (or symbol string) key))
-            (with-g-value (:value value 
+            (with-g-value (:value value
                                   :g-type (child-property-type parent key))
-              (gtk-container-child-set-property parent widget 
+              (gtk-container-child-set-property parent widget
                                                 key *g-value*)))
           keys (if (listp values) values (list values))))
 
@@ -125,10 +125,10 @@ Usage: (setf (child-property object parent :property) value)
   (:method ((container container) (widget widget))
     (gtk-container-remove container widget)))
 
-(defcfun gtk-container-propagate-draw 
+(defcfun gtk-container-propagate-draw
     :void (container pobject) (child pobject) (context :pointer))
 
-(defmethod propagate-draw ((container container) (widget widget) 
+(defmethod propagate-draw ((container container) (widget widget)
                            &optional (context cl-cairo2:*context*))
-  (gtk-container-propagate-draw container widget 
+  (gtk-container-propagate-draw container widget
                                 (cl-cairo2::get-pointer context)))

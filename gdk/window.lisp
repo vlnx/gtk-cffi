@@ -28,7 +28,7 @@
   :dock :desktop :dropdown-menu :popup-menu :tooltip :notification :combo :dnd)
 
 (defcstruct* geometry
-  (min-width :int)
+    (min-width :int)
   (min-height :int)
   (max-widht :int)
   (max-height :int)

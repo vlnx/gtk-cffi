@@ -2,4 +2,3 @@
 
 (defclass progress (progress)
   ())
-

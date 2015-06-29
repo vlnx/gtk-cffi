@@ -15,10 +15,10 @@
   (gtk-accel-label-new text))
 
 (defslots accel-label
-  accel-widget pobject)
+    accel-widget pobject)
 
 (deffuns accel-label
-  (:set accel-closure :pointer)
+    (:set accel-closure :pointer)
   (:get accel-width :uint)
   (refetch :boolean))
 

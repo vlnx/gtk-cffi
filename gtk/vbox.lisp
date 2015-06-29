@@ -8,7 +8,3 @@
 (defmethod gconstructor ((v-box v-box)
                          &key homogeneous (spacing 0) &allow-other-keys)
   (gtk-vbox-new homogeneous spacing))
-
-
-
-

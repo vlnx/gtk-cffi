@@ -7,7 +7,7 @@
   (green :int16)
   (blue :int16))
 
-(defcfun gdk-color-parse :boolean (str :string) 
+(defcfun gdk-color-parse :boolean (str :string)
          (color :pointer))
 (defcfun gdk-color-to-string :string (color :pointer))
 (defcfun gdk-color-free :void (color :pointer))
@@ -22,14 +22,14 @@
 
 (defmethod translate-to-foreign (value (type color-cffi))
   (if (pointerp value) value
-    (let ((color-st (foreign-alloc (cffi-objects::struct-type 'color-struct))))
-      (gdk-color-parse (string value) color-st)
-      color-st)))
+      (let ((color-st (foreign-alloc (cffi-objects::struct-type 'color-struct))))
+        (gdk-color-parse (string value) color-st)
+        color-st)))
 
 (defmethod translate-from-foreign (ptr (type color-cffi))
   (gdk-color-to-string ptr))
 
-(defcfun (color-equal "gdk_color_equal") :boolean 
+(defcfun (color-equal "gdk_color_equal") :boolean
   (color pcolor) (color2 pcolor))
 
 (defcstruct rgba-struct
@@ -54,10 +54,10 @@
 
 (defmethod translate-to-foreign (value (type rgba-cffi))
   (if (pointerp value) value
-    (let ((color-st (foreign-alloc :pointer)))
-      (assert (gdk-rgba-parse color-st (string value)) (value) 
-              "Bad RGBA color") 
-      color-st)))
+      (let ((color-st (foreign-alloc :pointer)))
+        (assert (gdk-rgba-parse color-st (string value)) (value)
+                "Bad RGBA color")
+        color-st)))
 
 (defmethod translate-from-foreign (ptr (type rgba-cffi))
   (gdk-rgba-to-string ptr))

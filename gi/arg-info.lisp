@@ -10,7 +10,7 @@
 (defcenum scope-type :invalid :call :async :notified)
 
 (deffuns arg-info
-  (:get direction direction)
+    (:get direction direction)
   (is-caller-allocates :boolean)
   (is-return-value :boolean)
   (is-optional :boolean)
@@ -26,8 +26,8 @@
 
 (defmethod print-object ((arg-info arg-info) stream)
   (print-unreadable-object (arg-info stream)
-    (format stream "~a ~a transfer ~a, type ~a" 
-            (name arg-info) (direction arg-info) 
+    (format stream "~a ~a transfer ~a, type ~a"
+            (name arg-info) (direction arg-info)
             (ownership-transfer arg-info) (get-type arg-info))))
 
 (defun arg->argument (arg &optional value)

@@ -13,12 +13,12 @@
 (save-setter misc alignment)
 
 (defcfun gtk-misc-get-alignment :void (misc pobject)
-  (x :pointer) (y :pointer))
+         (x :pointer) (y :pointer))
 
 (defgeneric alignment (misc)
   (:method ((misc misc))
     (with-foreign-outs-list ((x :float) (y :float)) :ignore
-      (gtk-misc-get-alignment misc x y))))
+                            (gtk-misc-get-alignment misc x y))))
 
 (defcfun gtk-misc-set-padding :void (misc pobject) (x :int) (y :int))
 (defgeneric (setf padding) (coords misc)
@@ -32,6 +32,4 @@
 (defgeneric padding (misc)
   (:method ((misc misc))
     (with-foreign-outs-list ((x :int) (y :int)) :ignore
-      (gtk-misc-get-padding misc x y))))
-
-
+                            (gtk-misc-get-padding misc x y))))

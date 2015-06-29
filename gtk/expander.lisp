@@ -6,7 +6,7 @@
 (defcfun gtk-expander-new-with-mnemonic :pointer (label :string))
 (defcfun gtk-expander-new :pointer (label :string))
 
-(defmethod gconstructor ((expander expander) 
+(defmethod gconstructor ((expander expander)
                          &key label mnemonic &allow-other-keys)
   (if mnemonic
       (gtk-expander-new-with-mnemonic mnemonic)
@@ -22,4 +22,3 @@
     label-fill :boolean)
 
 (init-slots expander)
-    

@@ -1,7 +1,7 @@
 ;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
 ;;;
 ;;; gvalue.lisp --- GValue wrappers for Common Lisp
-;;;                
+;;;
 ;;;
 ;;; Copyright (C) 2007, Roman Klochkov <kalimehtar@mail.ru>
 ;;;
@@ -23,7 +23,7 @@
   (v-pointer :pointer))
 
 (defcstruct* g-value-struct
-  "GValue struct"
+    "GValue struct"
   (g-type-type :ulong)
   (data g-value-data :count 2)) ;; with new CFFI -> (:union g-value-data)
 
@@ -49,7 +49,7 @@
 
 
 (defmethod gconstructor ((g-value g-value) &key
-                         (value nil value-p) g-type &allow-other-keys)
+                                             (value nil value-p) g-type &allow-other-keys)
   (let ((struct (make-instance 'g-value-struct :new-struct t
                                :free-after nil)))
     (setf (g-type-type struct) 0)
@@ -62,14 +62,14 @@
 (defcfun g-value-unset :void (g-value pobject))
 
 (defmethod unset ((g-value g-value))
-  ;(when (/= (g-type g-value) 0)
-;    (format t "Unset value ~a~%" g-value)
-    (g-value-unset g-value))
+                                        ;(when (/= (g-type g-value) 0)
+                                        ;    (format t "Unset value ~a~%" g-value)
+  (g-value-unset g-value))
 
 (defun init-g-value (ptr type value value-p)
   (macrolet ((gtypecase (x &rest body)
                `(typecase ,x
-                  ,@(mapcar (lambda (x) 
+                  ,@(mapcar (lambda (x)
                               (list (car x)
                                     (keyword->g-type (cdr x))))
                             body))))
@@ -91,16 +91,16 @@
           (g-value-set ptr value %type))))))
 
 (defmethod init ((g-value g-value) &key (value nil value-p) g-type)
-;  (format t "init ~a~%" g-value) 
+                                        ;  (format t "init ~a~%" g-value)
   (init-g-value (pointer g-value) g-type value value-p))
-  
-  
+
+
 (defun type-g-value (value) ; value->g_type
   "Value is a pointer to G-Value. Type fetched from value->g_type.
 Depends on implementation of GLib/GObject!
 Returns integer GType."
   (if (null-pointer-p value) 0
-      (let ((struct (make-instance 'g-value-struct :pointer value 
+      (let ((struct (make-instance 'g-value-struct :pointer value
                                    :free-after nil)))
         (g-type-type struct))))
 
@@ -131,17 +131,17 @@ Returns integer GType."
 
 (macrolet ((select-accessor (type prefix)
              `(ecase ,type
-                ,@(mapcar (lambda (x) 
+                ,@(mapcar (lambda (x)
                             `(,(keyword->g-type x)
                                (function
                                 ,(symbolicate prefix x))))
-                          (remove-if 
+                          (remove-if
                            (rcurry #'member '(:invalid :interface :void))
                            +fundamental-g-types+)))))
 
   (defun g-value-set (ptr value type)
     "PTR - foreign pointer, VALUE - lisp value, TYPE - GType id"
-;    (debug-out "g-value-set: ~a ~a~%" value (g-type->keyword type))
+                                        ;    (debug-out "g-value-set: ~a ~a~%" value (g-type->keyword type))
     (let ((ftype (g-type-fundamental type)))
       (let ((val (case ftype
                    ((#.(keyword->g-type :enum)
@@ -158,42 +158,42 @@ Returns integer GType."
                        #.(keyword->g-type :int64)
                        #.(keyword->g-type :uint64)) (round value))
                    (t value))))
-;        (debug-out "  converted value ~a~%" val) 
+                                        ;        (debug-out "  converted value ~a~%" val)
         (when (/= type 0)
-          (funcall (select-accessor ftype :g-value-set-) 
+          (funcall (select-accessor ftype :g-value-set-)
                    ptr val)))))
 
   (defun g-value-get (value)
     (unless (null-pointer-p value)
       (let* ((g-type (type-g-value value))
              (fundamental-type (g-type-fundamental g-type)))
-;        (format t "g-val:~a ~a ~a~%" g-type fundamental-type 
-;                (g-type->lisp g-type))
+                                        ;        (format t "g-val:~a ~a ~a~%" g-type fundamental-type
+                                        ;                (g-type->lisp g-type))
         (let ((res (case fundamental-type
-          (#.(keyword->g-type :boxed)
-             (find-object (g-value-get-boxed value) 
-                          (g-type->lisp g-type)))
-          (#.(keyword->g-type :enum)
-             (convert-from-foreign
-              (g-value-get-enum value) (g-type->lisp g-type)))
-          (#.(keyword->g-type :flags)
-             (convert-from-foreign
-              (g-value-get-flags value) (g-type->lisp g-type)))
-          (#.(keyword->g-type :interface)
-             (g-value-get-object value))
-          (t
-           (when (/= fundamental-type 0) 
-             (funcall (select-accessor 
-                     fundamental-type :g-value-get-) value))))))
-          ;(format t "g-val value:~a~%" res) 
+                     (#.(keyword->g-type :boxed)
+                        (find-object (g-value-get-boxed value)
+                                     (g-type->lisp g-type)))
+                     (#.(keyword->g-type :enum)
+                        (convert-from-foreign
+                         (g-value-get-enum value) (g-type->lisp g-type)))
+                     (#.(keyword->g-type :flags)
+                        (convert-from-foreign
+                         (g-value-get-flags value) (g-type->lisp g-type)))
+                     (#.(keyword->g-type :interface)
+                        (g-value-get-object value))
+                     (t
+                      (when (/= fundamental-type 0)
+                        (funcall (select-accessor
+                                  fundamental-type :g-value-get-) value))))))
+                                        ;(format t "g-val value:~a~%" res)
           res)))))
 
-  
+
 
 (defmethod value ((g-value g-value))
   (let ((l
          (g-value-get (pointer g-value))))
-    ;(format t "g-val2: ~a~%" l)
+                                        ;(format t "g-val2: ~a~%" l)
     l))
 
 (defmethod free :before ((g-value g-value))
@@ -205,15 +205,13 @@ Returns integer GType."
   "This macro allows recursive *g-value* binding"
   `(progn
      (let* ((changed? (/= 0 (g-type *g-value*)))
-            (*g-value* (if changed? (make-instance 'g-value) 
+            (*g-value* (if changed? (make-instance 'g-value)
                            *g-value*)))
        (init *g-value* ,@val)
        (unwind-protect
             (progn
               ,@body
               (value *g-value*))
-         (if changed? 
+         (if changed?
              (free *g-value*)
              (unset *g-value*))))))
-
-

@@ -2,5 +2,3 @@
 
 (defclass drawable (g-object)
   ())
-
-                        

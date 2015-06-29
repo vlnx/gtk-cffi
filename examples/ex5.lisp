@@ -10,7 +10,7 @@
 
   (setf (gsignal window :destroy) :gtk-main-quit
         (size-request window) '(400 150))
-  
+
 
   (setf (bg-pixmap window) "/usr/share/pixmaps/gnome-about-logo.png")
 

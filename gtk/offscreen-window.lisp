@@ -14,7 +14,7 @@
   (gtk-offscreen-window-new))
 
 (deffuns offscreen-window
-  (:get pixbuf pobject))
+    (:get pixbuf pobject))
 
 (defcfun gtk-offscreen-window-get-surface :pointer (off-win pobject))
 

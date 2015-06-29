@@ -16,7 +16,7 @@
                        ("finance" (480 360))))
 
 (cffi:defcallback clicked
-                  :void ((widget :pointer) (activated-module :string))
+    :void ((widget :pointer) (activated-module :string))
   (declare (ignore widget))
   (declare (ignorable widget))
   (format t "button_clicked: ~a~%" activated-module)
@@ -26,7 +26,7 @@
               (hide (gethash (car module) *apps*))))
           *mods*)
   (run (gethash activated-module *apps*)))
-  
+
 
 (cffi:defcallback on-delete :boolean ((widget :pointer)
                                       (event :pointer)
@@ -47,11 +47,11 @@
         (destroy (gethash "main" *apps*))
         (progn
           (hide (gethash module *apps*))
-                       (show (gethash "main" *apps*) :all t)
-                       (run (gethash "main" *apps*))))))
+          (show (gethash "main" *apps*) :all t)
+          (run (gethash "main" *apps*))))))
 
-   
-                  
+
+
 
 (defun show-buttons (v-box cur-module)
   (let ((h-box (make-instance 'h-box)))
@@ -69,39 +69,39 @@
                 (pack h-box button)
                 (pack h-box (make-instance 'label) :fill t :expand t)
                 (setf (gsignal button :clicked
-                               :data (cffi:convert-to-foreign 
+                               :data (cffi:convert-to-foreign
                                       (car module) :string))
                       (cffi:callback clicked))))
             *mods*)))
 
-                  
+
 
 (defun setup-app (module)
   (let ((dialog (make-instance 'dialog :title (car module) :flags :modal)))
     (setf (position-type dialog) :center-always)
     (setf (size-request dialog) (second module))
-    ;(setf (property dialog :content-area-border) 10)
+                                        ;(setf (property dialog :content-area-border) 10)
     (let ((top-area (content-area dialog)))
       (flet ((print-out (str)
-                        (pack top-area (make-instance 'label
-                                          :text str)
-                              :fill t :expand t)))
+               (pack top-area (make-instance 'label
+                                             :text str)
+                     :fill t :expand t)))
         (mapcar #'print-out
                 (if (string= (car module) "main")
                     '("this is main menu" "Press F12 to quit")
-                  (cons (format nil
-                                "This is ~a module"
-                                (car module))
-                        '("Press F12 to return to main menu"
-                          "or just close the window")))))
+                    (cons (format nil
+                                  "This is ~a module"
+                                  (car module))
+                          '("Press F12 to return to main menu"
+                            "or just close the window")))))
       (pack top-area
             (make-instance 'label) :fill t :expand t)
       (show-buttons top-area (car module)))
-    ;(setf (has-separator dialog) nil)
-    (setf (gsignal dialog :delete-event 
+                                        ;(setf (has-separator dialog) nil)
+    (setf (gsignal dialog :delete-event
                    :data (cffi:convert-to-foreign (car module) :string))
           (cffi:callback on-delete)
-          (gsignal dialog :key-press-event 
+          (gsignal dialog :key-press-event
                    :data (cffi:convert-to-foreign (car module) :string))
           (cffi:callback on-key))
     dialog))
@@ -120,33 +120,32 @@
   (destroy main-dialog))
 
 ;; Cleanup after dialog
-(g-object-cffi::timeout-add :idle #'gtk-main-quit)  
+(g-object-cffi::timeout-add :idle #'gtk-main-quit)
 (gtk-main)
 
-;(setf window (make-instance 'window))
+                                        ;(setf window (make-instance 'window))
 
-;(set-border-width window 6)
+                                        ;(set-border-width window 6)
 
 ;;(modify-bg window :normal "#B2D2DE")
 
-;(modify-bg-pixmap window :normal "/usr/share/pixmaps/gqview.png")
+                                        ;(modify-bg-pixmap window :normal "/usr/share/pixmaps/gqview.png")
 
-;(cffi:defcfun "gtk_rc_parse_string" :void (str :gtk-string))
+                                        ;(cffi:defcfun "gtk_rc_parse_string" :void (str :gtk-string))
 
-;(gtk-rc-parse-string "style \"my-style\" {
-;    bg_pixmap[NORMAL] = \"gqview.png\"
-;}")
+                                        ;(gtk-rc-parse-string "style \"my-style\" {
+                                        ;    bg_pixmap[NORMAL] = \"gqview.png\"
+                                        ;}")
 
-;(set-signal window "destroy" (cffi:foreign-symbol-pointer "gtk_main_quit"))
+                                        ;(set-signal window "destroy" (cffi:foreign-symbol-pointer "gtk_main_quit"))
 
-;(setf v-box (make-instance 'v-box))
+                                        ;(setf v-box (make-instance 'v-box))
 
-;(setf label
-;      (make-instance 'label :text "this is centered"))
+                                        ;(setf label
+                                        ;      (make-instance 'label :text "this is centered"))
 
-;(set-alignment label 0.5 0)
+                                        ;(set-alignment label 0.5 0)
 
-;(pack v-box label :start)
+                                        ;(pack v-box label :start)
 
-;(show-all window)
-
+                                        ;(show-all window)

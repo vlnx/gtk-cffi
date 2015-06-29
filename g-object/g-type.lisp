@@ -21,21 +21,21 @@
 (defctype g-type :ulong "GType")
 
 (defcstruct* g-type-interface
-  "GTypeInterface"
+    "GTypeInterface"
   (g-type-type g-type)
   (g-instance-type g-type))
 
 (defcstruct* g-type-class
-  "GTypeClass"
+    "GTypeClass"
   (g-type-type g-type))
 
 (defcstruct* g-type-instance
-  "GTypeInstance"
+    "GTypeInstance"
   (g-class (struct g-type-interface)))
 
 
 (defun g-type-from-instance (ptr)
-  (g-type-type (g-class (make-instance 'g-type-instance :pointer ptr 
+  (g-type-type (g-class (make-instance 'g-type-instance :pointer ptr
                                        :free-after nil))))
 
 (defcfun g-type-fundamental g-type (id g-type))
@@ -43,13 +43,13 @@
 (defcfun g-type-name :string (id :ulong))
 
 (defcstruct* g-type-query
-  "GTypeQuery"
+    "GTypeQuery"
   (g-type-type g-type)
   (name :string)
   (class-size :uint)
   (instance-size :uint))
 
-(defcfun g-type-query :void (type g-type) 
+(defcfun g-type-query :void (type g-type)
          (query (struct g-type-query)))
 
 (defun g-type->keyword (num)
@@ -88,7 +88,7 @@ Ex.: GType of GtkWindow -> 'gtk-cffi:window"
              (declare (type string str))
              (with-output-to-string (s)
                (let ((*standard-output* s))
-                 (loop 
+                 (loop
                     :for c :across str
                     :for i :from 0
                     :do (if (and (upper-case-p c)
@@ -96,24 +96,24 @@ Ex.: GType of GtkWindow -> 'gtk-cffi:window"
                             (mapc #'princ (list "-" c))
                             (princ (char-upcase c))))))))
     (with-hash *types* g-type
-      (let ((typename (g-type-name g-type)))
-        (when typename
-          (or (cdr (assoc typename *typenames* :test 'string=))
-              (let* ((pr-pos 
-                      (loop 
-                         :for c :across (subseq typename 1)
-                         :for i :from 1
-                         :when (upper-case-p c) :return i))
-                     (prefix (subseq typename 0 pr-pos))
-                     (package
-                      (cdr (assoc prefix *gtk-packages*
-                                  :test 'string=))))
-                (when package
-                    (intern (case-to-lisp
-                             (subseq typename pr-pos))
-                            package)))))))))
+               (let ((typename (g-type-name g-type)))
+                 (when typename
+                   (or (cdr (assoc typename *typenames* :test 'string=))
+                       (let* ((pr-pos
+                               (loop
+                                  :for c :across (subseq typename 1)
+                                  :for i :from 1
+                                  :when (upper-case-p c) :return i))
+                              (prefix (subseq typename 0 pr-pos))
+                              (package
+                               (cdr (assoc prefix *gtk-packages*
+                                           :test 'string=))))
+                         (when package
+                           (intern (case-to-lisp
+                                    (subseq typename pr-pos))
+                                   package)))))))))
 
-          
+
 (defcfun g-type-children (garray g-type) (type g-type) (n-children :pointer))
 
 (defun children (type)

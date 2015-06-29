@@ -3,7 +3,7 @@
 ;;; quark.lisp:
 ;;;
 ;;;     Quarks --- a 2-way association between a string
-;;;                and a unique integer identifier       
+;;;                and a unique integer identifier
 ;;;
 ;;; Copyright (C) 2007, Roman Klochkov <kalimehtar@mail.ru>
 ;;;
@@ -16,6 +16,5 @@
 
 (defcfun g-intern-string :pointer (string :string))
 
-(defcfun g-intern-static-string :pointer 
+(defcfun g-intern-static-string :pointer
   (string (:string :free-to-foreign nil)))
-

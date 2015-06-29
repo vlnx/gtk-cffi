@@ -4,7 +4,7 @@
   ())
 
 (defcfun "gdk_pixbuf_new" :pointer (colorspace :int) (has-alpha :boolean)
-  (bits-per-sample :int) (width :int) (height :int))
+         (bits-per-sample :int) (width :int) (height :int))
 
 (defcfun "gdk_pixbuf_new_from_file" :pointer
   (filename :string) (gerror pobject))
@@ -30,43 +30,43 @@
 ;;   (src-x :int) (src-y :int) (dst-x :int) (dst-y :int)
 ;;   (width :int) (height :int))
 
-;(defmethod new-from-image ((image image) width height src-x src-y)
-;  (gdk-pixbuf-get-from-image (null-pointer) image (null-pointer)
-;                             src-x src-y 0 0 width height))
+                                        ;(defmethod new-from-image ((image image) width height src-x src-y)
+                                        ;  (gdk-pixbuf-get-from-image (null-pointer) image (null-pointer)
+                                        ;                             src-x src-y 0 0 width height))
 
-;(defmethod new-from-image ((drawable drawable) width height src-x src-y)
-;  (gdk-pixbuf-get-from-drawable (null-pointer) drawable (null-pointer)
-;                             src-x src-y 0 0 width height))
+                                        ;(defmethod new-from-image ((drawable drawable) width height src-x src-y)
+                                        ;  (gdk-pixbuf-get-from-drawable (null-pointer) drawable (null-pointer)
+                                        ;                             src-x src-y 0 0 width height))
 
 (defmethod gconstructor ((obj-pixbuf pixbuf)
                          &key file loader pixbuf
-                         height width
-                         has-alpha (bits-per-sample 8)
-                         (preserve-aspect-ratio t)
-                         src-x src-y
-                         &allow-other-keys)
+                           height width
+                           has-alpha (bits-per-sample 8)
+                           (preserve-aspect-ratio t)
+                           src-x src-y
+                           &allow-other-keys)
   (declare (ignorable loader))
   (cond
-   (file (with-g-error 
-           g-error
-           (if (and width height)
-               (gdk-pixbuf-new-from-file-at-scale file
-                                                  width height
-                                                  preserve-aspect-ratio g-error)
-               (gdk-pixbuf-new-from-file file g-error))))
-   
-   ;; from GdkImage or GdkDrawable
-;   (image (new-from-image image width height src-x src-y))
-   
-   ;(loader (new-from-loader loader))
-   (pixbuf
-    (if (and src-x src-y width height)
-        (gdk-pixbuf-new-subpixbuf pixbuf src-x src-y width height)
-        (gdk-pixbuf-copy pixbuf)))
-   (t (gdk-pixbuf-new 0 has-alpha bits-per-sample width height))))
+    (file (with-g-error
+              g-error
+            (if (and width height)
+                (gdk-pixbuf-new-from-file-at-scale file
+                                                   width height
+                                                   preserve-aspect-ratio g-error)
+                (gdk-pixbuf-new-from-file file g-error))))
+
+    ;; from GdkImage or GdkDrawable
+                                        ;   (image (new-from-image image width height src-x src-y))
+
+                                        ;(loader (new-from-loader loader))
+    (pixbuf
+     (if (and src-x src-y width height)
+         (gdk-pixbuf-new-subpixbuf pixbuf src-x src-y width height)
+         (gdk-pixbuf-copy pixbuf)))
+    (t (gdk-pixbuf-new 0 has-alpha bits-per-sample width height))))
 
 (defcfun "gdk_pixbuf_get_width" :int (pixbuf pobject))
-(defcfun "gdk_pixbuf_get_height" :int (pixbuf pobject)) 
+(defcfun "gdk_pixbuf_get_height" :int (pixbuf pobject))
 
 (defmethod width ((pixbuf pixbuf))
   (gdk-pixbuf-get-width pixbuf))
@@ -88,4 +88,3 @@
 ;;                         (dither :none) (x-dither 0) (y-dither 0))
 ;;   (gdk-draw-pixbuf drawable gc pixbuf src-x src-y dst-x dst-y
 ;;                    width height dither x-dither y-dither))
-  

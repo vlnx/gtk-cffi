@@ -1,7 +1,7 @@
 (in-package :gtk-cffi-utils)
 
 (defmacro debug-out (&body body)
-;  (declare (ignore body))
+                                        ;  (declare (ignore body))
   `(format t ,@body)
   )
 
@@ -11,7 +11,7 @@
 
 (defun find-key (key seq)
   (when seq
-    (if (eq key (car seq)) 
+    (if (eq key (car seq))
         (list (first seq) (second seq))
         (find-key key (cddr seq)))))
 
@@ -42,7 +42,7 @@ NIL values not saved"
   "Universal template macro. For every ARG in ARGS binded to VARS generates
 body. ARGS is list. If VARS also list, then every element in ARGS is
 a list of the same length.
-  BODY of template should be as of DEFMACRO. 
+  BODY of template should be as of DEFMACRO.
 It should return list (resulting program chunk)."
   (with-gensyms (%do %vars)
     (cond
@@ -51,10 +51,9 @@ It should return list (resulting program chunk)."
           (,%do)))
       ((consp vars)
        `(template ,%vars ,args
-          (destructuring-bind ,vars ,%vars
-            ,@body)))
+                  (destructuring-bind ,vars ,%vars
+                    ,@body)))
       (t `(macrolet ((,%do ()
                        `(progn
                           ,@(mapcar (lambda (,vars) ,@body) ',args))))
             (,%do))))))
-

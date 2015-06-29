@@ -59,5 +59,3 @@
 
 (show window :all t)
 (gtk-main)
-
-      

@@ -9,7 +9,7 @@
 
 (defpackage gtk-cffi
   (:use #:common-lisp #:alexandria #:iterate
-        #:cffi-objects #:g-object-cffi #:g-lib-cffi #:gdk-cffi 
+        #:cffi-objects #:g-object-cffi #:g-lib-cffi #:gdk-cffi
         #:gtk-cffi-utils)
   (:shadow #:image #:window #:switch) ; gdk
   (:shadow #:maximize) ; iterate
@@ -45,7 +45,7 @@
    #:adjustment
    #:value
    #:lower
-   #:upper 
+   #:upper
    #:step-increment
    #:page-increment
    #:page-size
@@ -58,7 +58,7 @@
    #:add-provider
    #:load-css
    #:junction-sides
-   
+
    #:widget
    ;; widget slots
    #:name
@@ -192,7 +192,7 @@
    #:add-device-events
    #:reparent
    #:unparent
- 
+
    #:pop-composite-child
    #:push-composite-child
    #:cairo-should-draw-window
@@ -207,11 +207,11 @@
    #:style-property
 
    #:invisible
-   
+
    #:bin
    ;; methods
    #:child
-   
+
    #:container
    ;; container slots
    #:border-width
@@ -222,7 +222,7 @@
    ;; methods
    #:add
    #:propagate-draw
-   
+
    #:accel-group
    ;; methods
    #:connect
@@ -332,13 +332,13 @@
    #:list-windows
    #:current-grab
    #:current-device-grab
-   
+
    #:icon
    ;; slots
    #:state-wildcarded
    #:size-wildcarded
    #:direction-wildcarded
-   
+
    #:dialog
    ;;methods
    #:run
@@ -369,7 +369,7 @@
    #:documenters
    #:translator-credits
    #:logo
-   #:logo-icon-name 
+   #:logo-icon-name
 
    #:editable
    ;; slots
@@ -432,7 +432,7 @@
    #:text-index-to-layout-index
    #:current-icon-drag-source
    #:icon-at-pos
-  
+
    #:button
    ;; slots
    #:relief
@@ -461,15 +461,15 @@
    #:icons
    #:plus-button
    #:minus-button
-   
+
    #:volume-button
 
    #:lock-button
-   ; slot
+                                        ; slot
    #:permission
 
    #:switch
-   
+
    #:box
    ;; box slots
    #:spacing
@@ -495,7 +495,7 @@
    #:cell-renderer-text
 
    #:cell-renderer-toggle
-   
+
    #:cell-renderer-pixbuf
 
    #:cell-layout
@@ -503,7 +503,7 @@
    #:area
 
    #:cell-editable
-   
+
    #:misc
    ;; misc slots
    #:alignment
@@ -583,8 +583,8 @@
    #:rows-reordered
    #:ref-node
    #:unref-node
-   
-   
+
+
    #:list-store
    ;; list-store methods
    #:model-values
@@ -617,7 +617,7 @@
    #:fixed-height-mode
    #:search-position-func
    #:enable-tree-lines
-   #:grid-lines 
+   #:grid-lines
    #:enable-search
    ;; tree-view methods
    #:is-rubber-banding-active
@@ -637,7 +637,7 @@
    #:expand-all #:row-activated
    #:scroll-to-point #:collapse-all
    #:move-column-after
-                           
+
    #:tree-view-column
    ;; slots
    #:sort-column-id
@@ -665,8 +665,8 @@
 
    #:scrollable
    #:hscroll-policy
-   #:vscroll-policy   
-   
+   #:vscroll-policy
+
    #:scrolled-window
    ;; scrolled-window slots
    #:hadjustment
@@ -823,7 +823,7 @@
    #:unregister-deserialize-format
    #:unregister-serialize-format
    #:start-iter
-   #:end-iter 
+   #:end-iter
    #:text
    #:insert
    #:insert-range
@@ -845,7 +845,7 @@
    #:register-serialize-format
    #:register-deserialize-format
    #:lookup
-   
+
    #:text-view
    ;; slots
    #:buffer
@@ -897,7 +897,7 @@
 
    #:text-tag-table
    #:text-tag-table-remove
-   
+
    #:text-attributes
 
    #:appearance
@@ -988,7 +988,7 @@
    #:format-secondary-markup
 
    ;; handy defun
-   #:show-message 
+   #:show-message
 
    #:file-chooser
    ;; file-chooser slots
@@ -1012,11 +1012,11 @@
    #:add-pattern
    #:add-pixbuf-formats
    #:needed
-   
+
    #:file-chooser-dialog
 
    #:file-chooser-button
-   
+
    #:progress-bar
    ;; progress-bar slots
    #:fraction
@@ -1082,9 +1082,9 @@
    #:application
 
    #:builder
-   ;slot
+                                        ;slot
    #:translation-domain
-   ;methods
+                                        ;methods
    #:add-from
    #:connect-dignals
    #:object
@@ -1103,10 +1103,10 @@
    #:info-bar
 
    #:message-type
-   
+
 
    #:spinner
-   ;methods
+                                        ;methods
    #:start
    #:stop
 
@@ -1115,7 +1115,7 @@
    #:use-action-appearance
    #:do-set-related-action
    #:sync-action-properties
-   
+
    #:actionable
    #:action-name
    #:action-target-value

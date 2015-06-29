@@ -10,7 +10,7 @@
 (defclass action-group (object) ())
 
 (deffuns action-group
-  (has-action :boolean (action-name :string))
+    (has-action :boolean (action-name :string))
   (list-actions string-list)
   (:get action-enabled :boolean (action-name :string))
   (:get action-parameter-type variant-type (action-name :string))
@@ -19,7 +19,3 @@
   (:get action-state variant (action-name :string))
   (change-action-state :void (action-name :string) (value variant))
   (activate-action :void (action-name :string) (parameter variant)))
-  
-
-  
-  

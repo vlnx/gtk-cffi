@@ -18,20 +18,20 @@
           :bsd :mit-x11 :artistic)
 
 (defslots about-dialog
-  program-name :string
-  version :string
-  copyright :string
-  comments :string
-  license :string
-  license-type license
-  website :string
-  website-label :string
-  authors string-array
-  artists string-array
-  documenters string-array
-  translator-credits :string
-  logo pobject
-  logo-icon-name :string)
+    program-name :string
+    version :string
+    copyright :string
+    comments :string
+    license :string
+    license-type license
+    website :string
+    website-label :string
+    authors string-array
+    artists string-array
+    documenters string-array
+    translator-credits :string
+    logo pobject
+    logo-icon-name :string)
 
 
 (defmethod run ((dialog about-dialog) &key (keep-alive nil))

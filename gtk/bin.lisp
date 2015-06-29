@@ -11,4 +11,4 @@
 (defmethod (setf kids) (kids (bin bin))
   (if (second kids)
       (error "bin should have only one child")
-    (add bin (car kids))))
+      (add bin (car kids))))

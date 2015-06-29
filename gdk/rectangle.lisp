@@ -9,7 +9,7 @@
 (defcstruct-accessors (rectangle . cairo_rectangle_t))
 
 (defcfun gdk-rectangle-intersect :boolean
-  (src1 (struct rectangle)) (src2 (struct rectangle)) 
+  (src1 (struct rectangle)) (src2 (struct rectangle))
   (dest (struct rectangle :out t)))
 
 (defgeneric intersect (rect1 rect2))
@@ -20,7 +20,7 @@
       dest)))
 
 (defcfun gdk-rectangle-union :void
-  (src1 (struct rectangle)) (src2 (struct rectangle)) 
+  (src1 (struct rectangle)) (src2 (struct rectangle))
   (dest (struct rectangle :out t)))
 
 (defgeneric rectangle-union (rect1 rect2))

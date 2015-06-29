@@ -12,7 +12,7 @@
         #:cffi-objects #:g-lib-cffi #:g-object-cffi)
   (:import-from #:cl-cairo2 #:x #:y #:width #:height #:cairo_rectangle_t)
   (:export
-   ; types
+                                        ; types
    #:event-mask
    #:extension-mode
    #:pcolor
@@ -24,7 +24,7 @@
    #:event-type
 
    #:parse-event
-   
+
    #:rectangle
    #:intersect
    #:union
@@ -43,9 +43,9 @@
    #:window-type-hint
 
    #:pixmap
-   
+
    #:image
-   
+
    #:pixbuf
    ;; slots of pixbuf
    #:width
@@ -54,7 +54,7 @@
 
    #:key
    #:unichar
-   
+
    #:keymap
    #:have-bidi-layouts
    #:caps-lock-state
@@ -85,4 +85,4 @@
 (in-package #:gdk-cffi)
 (register-package "Gdk" *package*)
 (register-prefix *package* 'gdk)
-;(register-package "Cairo" (find-package "CL-CAIRO2"))
+                                        ;(register-package "Cairo" (find-package "CL-CAIRO2"))

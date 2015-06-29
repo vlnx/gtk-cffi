@@ -17,11 +17,11 @@
                #'gtk-cell-layout-pack-start)
            cell-layout cell-renderer expand)
   (iter
-    (for (attr column) in (attributes cell-renderer))
-    (add-attribute cell-layout cell-renderer attr column)))
+   (for (attr column) in (attributes cell-renderer))
+   (add-attribute cell-layout cell-renderer attr column)))
 
 (deffuns cell-layout
-  (add-attribute :void (cell pobject) (attr cffi-keyword) (column :int))
+    (add-attribute :void (cell pobject) (attr cffi-keyword) (column :int))
   (:get cells g-list-object)
   (:get area pobject)
   (reorder :void (cell pobject) (poisition :int))
@@ -29,8 +29,8 @@
   (clear :void))
 
 (defcallback cb-cell-data-func :void
-  ((cell-layout pobject) (cell-renderer pobject)
-   (model pobject) (tree-iter (struct tree-iter)) (data pdata))
+    ((cell-layout pobject) (cell-renderer pobject)
+     (model pobject) (tree-iter (struct tree-iter)) (data pdata))
   (funcall data cell-layout cell-renderer model tree-iter))
 
 (defcfun gtk-cell-layout-set-cell-data-func :void
@@ -43,4 +43,3 @@
                                   &key data destroy-notify)
   (set-callback cell-layout gtk-cell-layout-set-cell-data-func
                 cb-cell-data-func func data destroy-notify cell-renderer))
-

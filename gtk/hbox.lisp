@@ -8,5 +8,3 @@
 (defmethod gconstructor ((h-box h-box)
                          &key (homogeneous nil) (spacing 0) &allow-other-keys)
   (gtk-hbox-new homogeneous spacing))
-
-

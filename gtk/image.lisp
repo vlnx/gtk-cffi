@@ -10,21 +10,21 @@
   ())
 
 (defcfun gtk-image-new-from-file :pointer (filename cffi-pathname))
-(defcfun gtk-image-new-from-icon-set :pointer 
+(defcfun gtk-image-new-from-icon-set :pointer
   (icon-set pobject) (icon-size icon-size))
 (defcfun gtk-image-new-from-pixbuf :pointer (pixbuf pobject))
-(defcfun gtk-image-new-from-icon-name :pointer 
+(defcfun gtk-image-new-from-icon-name :pointer
   (icon-name :string) (icon-size icon-size))
 (defcfun gtk-image-new-from-animation :pointer (animation pobject))
-(defcfun gtk-image-new-from-stock :pointer 
+(defcfun gtk-image-new-from-stock :pointer
   (stock-id cffi-keyword) (size icon-size))
-(defcfun gtk-image-new-from-gicon :pointer 
+(defcfun gtk-image-new-from-gicon :pointer
   (gicon pobject) (icon-size icon-size))
 (defcfun gtk-image-new :pointer)
 
-(defmethod gconstructor ((image image) 
+(defmethod gconstructor ((image image)
                          &key file pixbuf stock-id gicon
-                         icon-size icon-name icon-set animation)
+                           icon-size icon-name icon-set animation)
   (cond
     (file (gtk-image-new-from-file file))
     (pixbuf (gtk-image-new-from-pixbuf pixbuf))
@@ -36,25 +36,25 @@
     (t (gtk-image-new))))
 
 (defslots image
-  pixel-size :int)
+    pixel-size :int)
 
 
 (defcfun gtk-image-set-from-file :pointer (image pobject) (filename :string))
-(defcfun gtk-image-set-from-icon-set :pointer 
+(defcfun gtk-image-set-from-icon-set :pointer
   (image pobject) (icon-set pobject) (icon-size icon-size))
 (defcfun gtk-image-set-from-pixbuf :pointer (image pobject) (pixbuf pobject))
-(defcfun gtk-image-set-from-icon-name :pointer (image pobject) 
+(defcfun gtk-image-set-from-icon-name :pointer (image pobject)
          (icon-name :string) (icon-size icon-size))
-(defcfun gtk-image-set-from-animation :pointer (image pobject) 
+(defcfun gtk-image-set-from-animation :pointer (image pobject)
          (animation pobject))
-(defcfun gtk-image-set-from-stock :pointer 
+(defcfun gtk-image-set-from-stock :pointer
   (image pobject) (stock-id :string) (size icon-size))
-(defcfun gtk-image-set-from-gicon :pointer 
+(defcfun gtk-image-set-from-gicon :pointer
   (image pobject) (gicon pobject) (icon-size icon-size))
 
 
 (defmethod reinitialize-instance ((image image) &key file pixbuf stock-id gicon
-                                  icon-size icon-name icon-set animation)
+                                                  icon-size icon-name icon-set animation)
   (cond
     (file (gtk-image-set-from-file image file))
     (pixbuf (gtk-image-set-from-pixbuf image pixbuf))
@@ -69,7 +69,7 @@
   :empty :pixbuf :stock :icon-set :animation :icon-name :gicon)
 
 (deffuns image
-  (:get pixbuf pobject)
+    (:get pixbuf pobject)
   (:get animation pobject)
   (:get storage-type image-type)
   (clear :void))
@@ -79,27 +79,24 @@
 (defgeneric icon-set (image)
   (:method ((image image))
     (with-foreign-outs ((icon-set 'pobject) (icon-size 'icon-size)) :ignore
-      (gtk-image-get-icon-set image icon-set icon-size))))
+                       (gtk-image-get-icon-set image icon-set icon-size))))
 
 (defcfun gtk-image-get-gicon :void (image pobject) (gicon :pointer)
          (icon-size :pointer))
 (defgeneric gicon (image)
   (:method ((image image))
     (with-foreign-outs ((gicon 'pobject) (icon-size 'icon-size)) :ignore
-      (gtk-image-get-gicon image gicon icon-size))))
+                       (gtk-image-get-gicon image gicon icon-size))))
 
-(defcfun gtk-image-get-icon-name :void (image pobject) 
+(defcfun gtk-image-get-icon-name :void (image pobject)
          (icon-name :pointer) (icon-size :pointer))
 (defmethod icon-name ((image image))
-    (with-foreign-outs ((icon-name :string) (icon-size 'icon-size)) :ignore
-      (gtk-image-get-icon-set image icon-name icon-size)))
+  (with-foreign-outs ((icon-name :string) (icon-size 'icon-size)) :ignore
+                     (gtk-image-get-icon-set image icon-name icon-size)))
 
-(defcfun gtk-image-get-stock :void (image pobject) 
+(defcfun gtk-image-get-stock :void (image pobject)
          (stock :pointer) (icon-size :pointer))
 (defgeneric stock (image)
   (:method ((image image))
     (with-foreign-outs ((stock :string) (icon-size 'icon-size)) :ignore
-      (gtk-image-get-stock image stock icon-size))))
-
-
-        
+                       (gtk-image-get-stock image stock icon-size))))

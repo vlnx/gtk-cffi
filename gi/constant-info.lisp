@@ -4,7 +4,7 @@
   ())
 
 (deffuns constant-info
-  (get-type (object type-info)))
+    (get-type (object type-info)))
 
 (defmethod free-ptr ((type (eql 'constant-info)) ptr)
   (g-base-info-unref ptr))
@@ -18,6 +18,6 @@
 
 (defmethod print-object ((constant-info constant-info) stream)
   (print-unreadable-object (constant-info stream)
-    (format stream "~a = ~s : ~a" 
-            (name constant-info) (value constant-info) 
+    (format stream "~a = ~s : ~a"
+            (name constant-info) (value constant-info)
             (get-type constant-info))))

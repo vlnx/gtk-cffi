@@ -11,7 +11,7 @@
   ((free-after :initform nil)))
 
 (defcstruct* g-object-class-struct
-  (type-classl (:struct g-type-class))
+    (type-classl (:struct g-type-class))
   (construct-properties :pointer)
   (constructor :pointer)
   (set-property :pointer)
@@ -59,11 +59,11 @@
   (g-param-spec-get-blurb g-param-spec))
 
 (defbitfield g-param-flags
-    :readable :writable :construct :construct-only :lax-validation
-    :static-name :static-nick :static-blurb)
+  :readable :writable :construct :construct-only :lax-validation
+  :static-name :static-nick :static-blurb)
 
 (defcstruct* g-param-spec-struct
-  "GParamSpec"
+    "GParamSpec"
   (g-type-instance :pointer)
   (name :string)
   (flags g-param-flags)
@@ -74,9 +74,9 @@
   (flags (make-instance 'g-param-spec-struct :pointer (pointer g-param-spec))))
 
 (defmethod g-type ((g-param-spec g-param-spec) &key owner)
-  (let ((struct (make-instance 'g-param-spec-struct 
+  (let ((struct (make-instance 'g-param-spec-struct
                                :pointer (pointer g-param-spec))))
-    (if owner 
+    (if owner
         (owner-type struct)
         (g-param-spec-type struct))))
 

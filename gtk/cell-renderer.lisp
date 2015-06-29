@@ -5,4 +5,3 @@
 
 (defcenum cell-renderer-mode
   :inert :activatable :editable)
-

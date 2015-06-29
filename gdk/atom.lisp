@@ -8,7 +8,7 @@
 (in-package :gdk-cffi)
 
 (defcfun gdk-atom-name :string (atom :pointer))
-(defcfun gdk-atom-intern-static-string :pointer 
+(defcfun gdk-atom-intern-static-string :pointer
   (val (:string :free-to-foreign nil)))
 (defcfun gdk-atom-intern :pointer (val :string) (only-if-exists :boolean))
 
@@ -25,4 +25,3 @@
 
 (defmethod translate-from-foreign (value (gatom gatom))
   (make-keyword (gdk-atom-name value)))
-    

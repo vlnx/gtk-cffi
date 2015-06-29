@@ -4,7 +4,7 @@
   ())
 
 (deffuns object-info
-  (:get type-name :string)
+    (:get type-name :string)
   (:get type-init :string)
   (:get abstract :boolean)
   (:get fundamental :boolean)
@@ -16,7 +16,7 @@
   (:get n-methods :int)
   (get-method (object function-info) (n :int))
   ((object-find-method . find-method) (object function-info) (name :string)))
-        
+
 
 (list-builder interfaces n-interfaces get-interface)
 

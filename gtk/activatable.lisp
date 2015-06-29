@@ -10,12 +10,11 @@
   ())
 
 (defslots activatable
-  related-action pobject
-  use-action-appearance :boolean)
+    related-action pobject
+    use-action-appearance :boolean)
 
 (deffuns activatable
-  (do-set-related-action :void (action pobject))
+    (do-set-related-action :void (action pobject))
   (sync-action-properties :void (action pobject)))
 
 (init-slots activatable)
-  

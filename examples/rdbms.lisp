@@ -7,49 +7,49 @@
 
 (in-package :test)
 
-(defvar *database* 
-  (make-instance 'postgresql-postmodern 
-                 :connection-specification '(:database "monk" 
-                                             :user-name "monk" 
+(defvar *database*
+  (make-instance 'postgresql-postmodern
+                 :connection-specification '(:database "monk"
+                                             :user-name "monk"
                                              :password "")))
-;(enable-sql-syntax)
+                                        ;(enable-sql-syntax)
 
 
 (gtk-init)
 
 (defvar *model*
-  (make-instance 'list-store :columns '(:string :string 
+  (make-instance 'list-store :columns '(:string :string
                                         :string :string :uint)))
 
 (defun process (row)
-   (list 
-    (local-time:format-timestring nil 
-                                  (aref row 0) 
-                                  :format local-time:+asctime-format+)
-    (case (aref row 1)
-      (6 "TCP")
-      (17 "UDP")
-      (t (format nil "~a" (aref row 1))))
-    (format nil "~a:~a" (aref row 2) (aref row 3))
-    (format nil "~a:~a" (aref row 4) (aref row 5))
-    (aref row 6)))
+  (list
+   (local-time:format-timestring nil
+                                 (aref row 0)
+                                 :format local-time:+asctime-format+)
+   (case (aref row 1)
+     (6 "TCP")
+     (17 "UDP")
+     (t (format nil "~a" (aref row 1))))
+   (format nil "~a:~a" (aref row 2) (aref row 3))
+   (format nil "~a:~a" (aref row 4) (aref row 5))
+   (aref row 6)))
 
-;(map nil (lambda (row)
-;           (append-values *model* (process row)))
-;     (with-transaction (execute (sql (select * traffic)))))
-          
+                                        ;(map nil (lambda (row)
+                                        ;           (append-values *model* (process row)))
+                                        ;     (with-transaction (execute (sql (select * traffic)))))
+
 
 
 (defvar *window*
   (gtk-model
    'window :width 800
-           :height 600
-           :title "Траффик"
-           :signals '(:destroy :gtk-main-quit)
+   :height 600
+   :title "Траффик"
+   :signals '(:destroy :gtk-main-quit)
    ('scrolled-window
-      ('tree-view :id :tree :model *model*
-                  :columns '("Дата" "Протокол" 
-                             "Источник" "Приемник" "Размер")))))
+    ('tree-view :id :tree :model *model*
+                :columns '("Дата" "Протокол"
+                           "Источник" "Приемник" "Размер")))))
 
 (setf (gsignal *window* :show)
       (lambda (&rest rest)
@@ -69,11 +69,11 @@
           (let*
               ((table (with-transaction (execute (sql (select * traffic)))))
                (ltable (- (length table) 1))
-               (table2 (loop 
+               (table2 (loop
                           :for i :from 0 :to ltable
                           :collecting (process (aref table i))))
                (i 0) (pos 0))
-            (mapcar 
+            (mapcar
              (lambda (x)
                (when (> (incf i) 1024)
                  (setf i 0
@@ -81,7 +81,7 @@
                        (/ (incf pos 1024) ltable))
                  (yield))
                (append-values *model* x))
-             table2))   
+             table2))
           (setf (model (object-by-id :tree)) *model*)
           (destroy progress-dialog))))
 ;;       (gsignal *window* :realize)
@@ -89,11 +89,8 @@
 ;;         (declare (ignore rest))
 ;;         (format t "Realized~%")))
 
-        
+
 
 (show *window*)
 
 (gtk-main)
-
-
-

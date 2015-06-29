@@ -16,5 +16,5 @@
   (gtk-spinner-new))
 
 (deffuns spinner
-  (start :void)
+    (start :void)
   (stop :void))

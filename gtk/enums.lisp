@@ -4,7 +4,7 @@
   :none :ltr :rtl)
 
 (defbitfield junction-sides
-  (:none 0) :corner-topleft :corner-topright 
+  (:none 0) :corner-topleft :corner-topright
   :corner-bottomleft :corner-bottomright
   (:top #b0011) (:bottom #b1100) (:left #b0101) (:right #b1010))
 

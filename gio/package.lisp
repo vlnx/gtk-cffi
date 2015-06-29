@@ -11,23 +11,23 @@
   (:nicknames #:gio)
   (:use #:common-lisp #:cffi-objects #:g-object-cffi #:g-lib-cffi #:iterate)
   (:export
-   #:list-actions 
-   #:action-parameter-type 
+   #:list-actions
+   #:action-parameter-type
    #:action-state
-   #:has-action 
+   #:has-action
    #:application-id
-   #:is-registered 
+   #:is-registered
    #:change-action-state
-   #:activate-action 
+   #:activate-action
    #:release
-   #:action-group 
-   #:hold 
+   #:action-group
+   #:hold
    #:is-remote
-   #:action-state-hint 
+   #:action-state-hint
    #:action-enabled
-   #:activate 
+   #:activate
    #:action-state-type
-   #:inactivity-timeout 
+   #:inactivity-timeout
    #:flags))
 
 (in-package #:gio-cffi)

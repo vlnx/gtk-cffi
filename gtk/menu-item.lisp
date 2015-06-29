@@ -14,7 +14,7 @@
 (defcfun gtk-menu-item-new-with-label :pointer (label :string))
 (defcfun gtk-menu-item-new-with-mnemonic :pointer (label :string))
 
-(defmethod gconstructor ((menu-item menu-item) 
+(defmethod gconstructor ((menu-item menu-item)
                          &key label mnemonic &allow-other-keys)
   (if label
       (if mnemonic

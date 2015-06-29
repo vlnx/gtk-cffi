@@ -8,4 +8,3 @@
 (in-package :gio-cffi)
 
 (defclass simple-action-group (g-object action-group) ())
-

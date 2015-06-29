@@ -19,4 +19,3 @@
 
 (defmethod shadow-type ((frame frame))
   (gtk-frame-get-shadow-type frame))
-

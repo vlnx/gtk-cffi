@@ -19,7 +19,7 @@
   (initialize text-view 'buffer)
   (if buffer
       (gtk-text-view-new-with-buffer buffer)
-    (gtk-text-view-new)))
+      (gtk-text-view-new)))
 
 (defcenum text-window-type
   :private :widget :text
@@ -43,10 +43,10 @@
 
 
 (deffuns text-view
-  (scroll-to-mark :void 
-                  (text-mark pobject) (within-margin :double)
-                  (use-align :boolean) (xalign :double) (yalign :double))
-  (scroll-to-iter :void 
+    (scroll-to-mark :void
+                    (text-mark pobject) (within-margin :double)
+                    (use-align :boolean) (xalign :double) (yalign :double))
+  (scroll-to-iter :void
                   (text-iter pobject) (within-margin :double)
                   (use-align :boolean) (xalign :double) (yalign :double))
   (scroll-mark-onscreen :void (text-mark pobject))
@@ -63,7 +63,7 @@
   (starts-display-line :boolean (text-iter pobject))
   (move-visually :boolean (text-iter pobject) (count :int))
   (add-child-at-anchor :void (child pobject) (anchor pobject))
-  (add-child-in-window :void 
+  (add-child-in-window :void
                        (child pobject) (win text-window-type)
                        (xpos :int) (ypos :int))
   (move-child :void (child pobject) (xpos :int) (ypos :int))
@@ -75,8 +75,8 @@
   ())
 
 (defcfun gtk-text-child-anchor-new :pointer)
-(defmethod gconstructor ((text-child-anchor text-child-anchor) &key 
-                         &allow-other-keys)
+(defmethod gconstructor ((text-child-anchor text-child-anchor) &key
+                                                                 &allow-other-keys)
   (gtk-text-child-anchor-new))
 
 (defgtkgetter widgets g-list-object text-child-anchor)
@@ -84,7 +84,3 @@
 
 
 (init-slots text-view)
-
-
-
-  

@@ -1,5 +1,5 @@
 (asdf:oos 'asdf:load-op :gtk-cffi-ext)
-;(declaim (optimize speed))
+                                        ;(declaim (optimize speed))
 (defpackage #:test-10
   (:use #:common-lisp #:iter #:gtk-cffi #:gtk-cffi-ext #:g-object-cffi))
 (in-package #:test-10)
@@ -9,12 +9,12 @@
   (make-instance 'lisp-model
                  :implementation
                  (make-instance 'lisp-model-tree-array
-                                :tree '((("ok" 1) 
-                                         (("Ok2" 2))) 
+                                :tree '((("ok" 1)
+                                         (("Ok2" 2)))
                                         (("ok3" 3)))
                                 :columns '(:string :int))))
-                                ;:array #(("ok" 1))
-                                ;:columns '(:string :int))))
+                                        ;:array #(("ok" 1))
+                                        ;:columns '(:string :int))))
 
 ;; (defparameter *model0*
 ;;   (make-instance 'list-store :columns '(:int)))
@@ -30,19 +30,19 @@
 
 (defparameter *window*
   (gtk-model
-    'window :width 400
-            :height 400
-            :signals '(:destroy :gtk-main-quit)
-    ('scrolled-window
-     ('tree-view :model *model* :columns '("Test str" "Test int")))))
+   'window :width 400
+   :height 400
+   :signals '(:destroy :gtk-main-quit)
+   ('scrolled-window
+    ('tree-view :model *model* :columns '("Test str" "Test int")))))
 
 
-;(show *window*)
-;(show #(1 2 3 4 5))
+                                        ;(show *window*)
+                                        ;(show #(1 2 3 4 5))
 
 (show (make-instance 'lisp-model-tree-array
-                     :tree '((("ok" 1) 
-                              (("Ok2" 2))) 
+                     :tree '((("ok" 1)
+                              (("Ok2" 2)))
                              (("ok3" 3)))
                      :columns '(:string :int))
       :columns '("str" "int"))

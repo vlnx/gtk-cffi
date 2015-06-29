@@ -2,4 +2,3 @@
 
 (defclass cell-editable (object)
   ())
-

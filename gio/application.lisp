@@ -17,19 +17,19 @@
   (application-id :string) (flags application-flags))
 
 (defslots application
-  application-id :string
-  inactivity-timeout :uint
-  flags application-flags)
+    application-id :string
+    inactivity-timeout :uint
+    flags application-flags)
 
 (deffuns application
-  (:set action-group pobject)
+    (:set action-group pobject)
   (:get is-registered :boolean)
   (:get is-remote :boolean)
   (hold :void)
   (release :void)
   (activate :void))
 
-(defcfun g-application-run :void (application pobject) 
+(defcfun g-application-run :void (application pobject)
          (argc :int) (argv :pointer))
 
 (defgeneric run (application &key params &allow-other-keys)
@@ -37,10 +37,10 @@
     (if args
         (with-foreign-object (ptr :string (length args))
           (iter
-            (for i from 0)
-            (for arg in args)
-            (setf (mem-aref ptr :string i) arg))
+           (for i from 0)
+           (for arg in args)
+           (setf (mem-aref ptr :string i) arg))
           (g-application-run application (length args) ptr))
         (g-application-run application 0 (null-pointer)))))
 
-;  (register :boolean 
+                                        ;  (register :boolean

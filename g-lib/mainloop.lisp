@@ -1,7 +1,7 @@
 ;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
 ;;;
 ;;; mainloop.lisp --- GLib main event loop utilities
-;;;                 
+;;;
 ;;;
 ;;; Copyright (C) 2007, Roman Klochkov <kalimehtar@mail.ru>
 ;;;
@@ -9,28 +9,28 @@
 (in-package :g-lib-cffi)
 
 (defcfun "g_timeout_add" :uint (interval :uint)
-  (func pfunction) (data :pointer))
+         (func pfunction) (data :pointer))
 
 (defcfun "g_timeout_add_full" :uint (prio :int)
-  (interval :uint) (func pfunction) (data :pointer) (notify-handler pfunction))
+         (interval :uint) (func pfunction) (data :pointer) (notify-handler pfunction))
 
 (defcfun "g_timeout_add_seconds" :uint (interval :uint)
-  (func pfunction) (data :pointer))
+         (func pfunction) (data :pointer))
 
 (defcfun "g_timeout_add_seconds_full" :uint (prio :int)
-  (interval :uint) (func pfunction) (data :pointer) (notify-handler pfunction))
+         (interval :uint) (func pfunction) (data :pointer) (notify-handler pfunction))
 
-(defcfun "g_idle_add" :uint (func pfunction) (data :pointer)) 
+(defcfun "g_idle_add" :uint (func pfunction) (data :pointer))
 
 (defcfun "g_idle_add_full" :uint (prio :int) (func pfunction)
-  (data :pointer) (notify-handler pfunction)) 
+         (data :pointer) (notify-handler pfunction))
 
 (defvar *timeout-funcs* nil
   "Assoc array number -> function | (function data)")
 (defvar *timeout-maxnum* 0
   "Next number for *timeout-funcs* adding")
 
-(defcallback timeout-func 
+(defcallback timeout-func
     :boolean ((data-ptr :pointer))
   (let ((func-list (cdr (assoc (pointer-address data-ptr) *timeout-funcs*))))
     (destructuring-bind (func data notify) func-list
@@ -45,13 +45,13 @@
                  *timeout-funcs*))
     (make-pointer next)))
 
-(defcallback free-timeout 
+(defcallback free-timeout
     :void ((data :pointer))
   (let ((key (pointer-address data)))
     (let* ((func-list (cdr (assoc key *timeout-funcs*)))
            (notify (third func-list)))
       (when notify (funcall notify)))
-    (setf *timeout-funcs* 
+    (setf *timeout-funcs*
           (delete-if (lambda (x) (eq key (car x))) *timeout-funcs*))))
 
 (defun timeout-add (interval func &key data priority destroy-notify)
@@ -77,7 +77,7 @@
               (g-idle-add-full
                (or priority 200) func data destroy-notify)))
       (let ((seconds (and (listp interval)
-                          (find (second interval) 
+                          (find (second interval)
                                 '(sec secs second seconds s))))
             (%interval (if (listp interval) (car interval) interval))
             (%priority (or priority 0)))

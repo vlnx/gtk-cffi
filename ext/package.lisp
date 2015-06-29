@@ -2,11 +2,11 @@
 
 (defpackage gtk-cffi-ext
   (:use #:common-lisp #:cffi #:alexandria #:iterate
-        #:cffi-objects #:g-object-cffi #:g-lib-cffi #:gdk-cffi 
+        #:cffi-objects #:g-object-cffi #:g-lib-cffi #:gdk-cffi
         #:gtk-cffi-utils #:gtk-cffi)
   (:shadowing-import-from #:gtk-cffi #:image #:window #:switch)
-  (:import-from #:gtk-cffi 
-                #:tree-iter #:u1 #:stamp 
+  (:import-from #:gtk-cffi
+                #:tree-iter #:u1 #:stamp
                 #:tree-model-iface #:get-n-columns #:get-column-type
                 #:get-iter #:get-path #:get-value #:iter-next #:iter-previous
                 #:iter-children #:iter-has-child #:iter-n-children #:get-flags
@@ -29,4 +29,3 @@
 
    #:with-progress
    #:set-progress))
-

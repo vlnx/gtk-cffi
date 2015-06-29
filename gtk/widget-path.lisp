@@ -17,9 +17,7 @@
   (gtk-widget-path-new))
 
 (deffuns widget-path
-  (to-string :string)
+    (to-string :string)
   (append-type :int (type g-type))
   (append-for-widget :int (widget pobject))
   (prepend-type :int (type g-type)))
-
-  

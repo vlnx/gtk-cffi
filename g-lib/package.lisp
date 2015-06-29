@@ -14,7 +14,7 @@
    ;; gerror macro
    #:with-g-error
    #:throw-g-error
-   
+
    ;; types
    #:g-list
    #:g-slist
@@ -40,6 +40,6 @@
 
    #:g-lib-array
    #:g-lib-string
-   
+
    #:g-file
    ))

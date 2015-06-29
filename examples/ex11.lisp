@@ -8,27 +8,27 @@
 (defparameter *window*
   (gtk-model
    'window :width 80
-           :title "Hello world!"
-           :signals `(:destroy 
-                      :gtk-main-quit
-                      :enter-notify-event 
-                      ,(lambda (widget event) 
-                        (declare (ignore widget event))
-                        (format t "Entered~%")))
-   ('v-box 
+   :title "Hello world!"
+   :signals `(:destroy
+              :gtk-main-quit
+              :enter-notify-event
+              ,(lambda (widget event)
+                       (declare (ignore widget event))
+                       (format t "Entered~%")))
+   ('v-box
     ('button :label "Hello!"
-            :signals (list :clicked 
-                           (let ((count 0)) 
-                             (lambda (widget) 
-                               (declare (ignore widget))
-                               (format t "Pressed ~a times~%" 
-                                       (incf count))))))
+             :signals (list :clicked
+                            (let ((count 0))
+                              (lambda (widget)
+                                (declare (ignore widget))
+                                (format t "Pressed ~a times~%"
+                                        (incf count))))))
     ('button :label "About"
              :signals (list :clicked
                             (lambda (widget)
                               (declare (ignore widget))
                               (run (make-instance 'about-dialog
-                                                  :authors 
+                                                  :authors
                                                   '("Roman Klochkov")
                                                   :program-name "Test"
                                                   :licence-type :gpl-3-0))))))))

@@ -8,7 +8,7 @@
 (in-package :gtk-cffi)
 
 (defclass widget (g-object buildable)
-  ((%style-properties :accessor %style-properties 
+  ((%style-properties :accessor %style-properties
                       :initform nil :allocation :class)))
 
 (defcfun gtk-widget-new :pointer (g-type g-type) (null :pointer))
@@ -18,7 +18,7 @@
   (gtk-widget-new type (null-pointer)))
 
 (defcstruct* requisition
-  "GtkRequisition"
+    "GtkRequisition"
   (width :int)
   (height :int))
 
@@ -34,7 +34,7 @@
 
 
 (defcstruct* allocation
-  "GtkAllocation"
+    "GtkAllocation"
   (x :int) (y :int)
   (width :int) (height :int))
 
@@ -43,10 +43,10 @@
 (defcfun gtk-widget-show-all :boolean (widget pobject))
 (defcfun gtk-widget-show-now :boolean (widget pobject))
 
-(defgeneric show (widget &key all now) 
+(defgeneric show (widget &key all now)
   (:documentation "gtk_widget_show[_now|_all] ALL and NOW are booleans")
   (:method ((widget widget) &key (all t) now)
-    (funcall (cond 
+    (funcall (cond
                (now #'gtk-widget-show-now)
                (all #'gtk-widget-show-all)
                (t #'gtk-widget-show)) widget)))
@@ -60,7 +60,7 @@
     (cl-cairo2::with-context-pointer (context cntx-pointer)
       (gtk-widget-draw widget cntx-pointer))))
 
-(defcfun gtk-widget-queue-draw-area :void 
+(defcfun gtk-widget-queue-draw-area :void
   (widget pobject) (x :int) (y :int) (width :int) (height :int))
 (defcfun gtk-widget-queue-draw-region :void (widget pobject) (region pobject))
 (defcfun gtk-widget-queue-draw :void (widget pobject))
@@ -88,10 +88,10 @@
   (:method ((widget widget))
     "returns (width height)"
     (with-foreign-outs-list ((width :int) (height :int)) :ignore
-      (gtk-widget-get-size-request widget width height))))
+                            (gtk-widget-get-size-request widget width height))))
 
 (defcfun gtk-widget-set-size-request
-  :void (widget pobject) (w :int) (h :int))
+    :void (widget pobject) (w :int) (h :int))
 
 (defgeneric (setf size-request) (coords widget)
   (:method (coords (widget widget))
@@ -99,15 +99,15 @@
     (gtk-widget-set-size-request widget
                                  (first coords)
                                  (second coords))))
-(save-setter widget size-request)  
+(save-setter widget size-request)
 
-(defcfun gtk-widget-intersect :boolean 
+(defcfun gtk-widget-intersect :boolean
   (src1 pobject) (src2 (struct rectangle)) (dest (struct rectangle :out t)))
 
 (defmethod intersect ((rect1 widget) (rect2 rectangle))
-   (let ((dest (make-instance 'rectangle)))
-     (when (gtk-widget-intersect rect1 rect2 dest)
-       dest)))
+  (let ((dest (make-instance 'rectangle)))
+    (when (gtk-widget-intersect rect1 rect2 dest)
+      dest)))
 
 
 (defcenum align :fill :start :end :center)
@@ -116,7 +116,7 @@
   (:toplevel 16)
   :no-window :realized :mapped :visible :sensitive
   :parent-sensitive :can-focus :set-focus :can-default :has-default
-  :has-grab :rc-style :composite-child :no-reparent :app-paintable 
+  :has-grab :rc-style :composite-child :no-reparent :app-paintable
   :recieves-default :double-buffered :no-show-all)
 
 (defslots widget
@@ -157,18 +157,18 @@
     support-multidevice :boolean
     app-paintable :boolean)
 
-(defgtkfuns widget 
-  (activate :boolean)
-  (hide :boolean)  
+(defgtkfuns widget
+    (activate :boolean)
+  (hide :boolean)
   (size-allocate :void (allocation (struct allocation)))
   (add-accelerator :void
                    (accel-signal :string) (accel-group pobject) (accel-key key)
                    (accel-mods modifier-type) (accel-flags accel-flags))
   (remove-accelerator :boolean
-                      (accel-group pobject) (accel-key key) 
+                      (accel-group pobject) (accel-key key)
                       (accel-mods modifier-type))
   (list-accel-closures g-list)
-  (can-activate-accel :boolean (signal-id :uint))   
+  (can-activate-accel :boolean (signal-id :uint))
   ((widget-event . event) :boolean (event :pointer))
   (send-expose :int (event :pointer))
   (send-focus-change :boolean (event :pointer))
@@ -181,7 +181,7 @@
   (override-symbolic-color :void (name :string) (color prgba))
   (:get style-context pobject)
   (override-font :void (font pango-cffi:font))
-  (:set (widget-accel-path . accel-path) :string 
+  (:set (widget-accel-path . accel-path) :string
         (accel-group pobject))
   (destroy :void)
   (render-icon-pixbuf pobject (stock-id :string) (size icon-size))
@@ -204,7 +204,7 @@
   (:set redraw-on-allocate :boolean)
   (mnemonic-activate :boolean &key (group-cycling :boolean))
   (unparent :void)
-  ((widget-map . map) :void) 
+  ((widget-map . map) :void)
   (unmap :void)
   (realize :void)
   (unrealize :void)
@@ -242,7 +242,7 @@
   (:set-last device-enabled :boolean (device pobject))
   (:set allocation (struct allocation)))
 
-(defcfun gtk-widget-get-allocation :void 
+(defcfun gtk-widget-get-allocation :void
   (widget pobject) (allocation (struct allocation :out t)))
 
 (defgeneric allocation (widget)
@@ -251,7 +251,7 @@
       (gtk-widget-get-allocation widget res)
       res)))
 
-(setf (documentation 'clipboard 'function) 
+(setf (documentation 'clipboard 'function)
       "SELECTION should be :PRIMARY or :CLIPOARD")
 
 (defcfun ("gtk_widget_pop_composite_child" pop-composite-child) :void)
@@ -263,7 +263,7 @@
 (defgeneric get-pointer (widget)
   (:method ((widget widget))
     (with-foreign-outs ((x :int) (y :int)) :ignore
-      (gtk-widget-get-pointer widget x y))))
+                       (gtk-widget-get-pointer widget x y))))
 
 (defcfun gtk-widget-translate-coordinates :boolean
   (src-widget pobject) (dst-widget pobject) (src-x :int) (src-y :int)
@@ -273,10 +273,10 @@
   (:method ((src-widget widget) (dst-widget widget) src-x src-y)
     "Returns (values dst-x dst-y)"
     (with-foreign-outs ((dst-x :int) (dst-y :int)) :if-success
-      (gtk-widget-translate-coordinates src-widget dst-widget 
-                                        src-x src-y dst-x dst-y))))
+                       (gtk-widget-translate-coordinates src-widget dst-widget
+                                                         src-x src-y dst-x dst-y))))
 
-(defcfun gtk-cairo-should-draw-window :boolean 
+(defcfun gtk-cairo-should-draw-window :boolean
   (context :pointer) (gdk-window pobject))
 
 (defgeneric cairo-should-draw-window (window &optional context)
@@ -290,7 +290,7 @@
   (cairo-should-draw-window (window widget) context))
 
 (defcfun gtk-cairo-transform-to-window :void
-    (context :pointer) (widget pobject) (gdk-window pobject))
+  (context :pointer) (widget pobject) (gdk-window pobject))
 
 (defgeneric cairo-transform-to-window (widget window &optional context)
   (:method ((widget widget) window &optional (context cl-cairo2:*context*))
@@ -298,50 +298,50 @@
       (gtk-cairo-transform-to-window cntx-pointer widget window))))
 
 (defmethod cairo-transform-to-window ((widget widget) (window widget)
-                                     &optional (context cl-cairo2:*context*))
+                                      &optional (context cl-cairo2:*context*))
   (cairo-transform-to-window widget (window window) context))
 
-(defcfun gtk-widget-set-state-flags :void 
+(defcfun gtk-widget-set-state-flags :void
   (widget pobject) (flags state-flags) (clear :boolean))
-(defcfun gtk-widget-unset-state-flags :void 
+(defcfun gtk-widget-unset-state-flags :void
   (widget pobject) (flags state-flags))
 
 (defgeneric (setf state-flags) (value widget &key type)
   (:method (value (widget widget) &key type)
-    "If TYPE = :SET, only set bits, :UNSET -- unset bits, 
+    "If TYPE = :SET, only set bits, :UNSET -- unset bits,
 otherwise set state = VALUE"
     (case type
       (:set (gtk-widget-set-state-flags widget value nil))
       (:unset (gtk-widget-unset-state-flags widget value))
       (t (gtk-widget-set-state-flags widget value t)))))
 
-(defcfun gtk-widget-get-preferred-height :void 
+(defcfun gtk-widget-get-preferred-height :void
   (widget pobject) (minimum :pointer) (natural :pointer))
-(defcfun gtk-widget-get-preferred-height-for-width :void 
+(defcfun gtk-widget-get-preferred-height-for-width :void
   (widget pobject) (width :int) (minimum :pointer) (natural :pointer))
 
 (defgeneric preferred-height (widget &key for-width)
   (:method ((widget widget) &key for-width)
     "Returns (values minimum natural)"
     (with-foreign-outs ((minimum :int) (natural :int)) :ignore
-      (if for-width
-          (gtk-widget-get-preferred-height-for-width widget
-                                                     for-width minimum natural)
-          (gtk-widget-get-preferred-height widget minimum natural)))))
+                       (if for-width
+                           (gtk-widget-get-preferred-height-for-width widget
+                                                                      for-width minimum natural)
+                           (gtk-widget-get-preferred-height widget minimum natural)))))
 
-(defcfun gtk-widget-get-preferred-width :void 
+(defcfun gtk-widget-get-preferred-width :void
   (widget pobject) (minimum :pointer) (natural :pointer))
-(defcfun gtk-widget-get-preferred-width-for-height :void 
+(defcfun gtk-widget-get-preferred-width-for-height :void
   (widget pobject) (height :int) (minimum :pointer) (natural :pointer))
 
 (defgeneric preferred-width (widget &key for-height)
   (:method ((widget widget) &key for-height)
     "Returns (values minimum natural)"
     (with-foreign-outs ((minimum :int) (natural :int)) :ignore
-      (if for-height
-          (gtk-widget-get-preferred-width-for-height widget 
-                                                     for-height minimum natural)
-          (gtk-widget-get-preferred-width widget minimum natural)))))
+                       (if for-height
+                           (gtk-widget-get-preferred-width-for-height widget
+                                                                      for-height minimum natural)
+                           (gtk-widget-get-preferred-width widget minimum natural)))))
 
 (defcenum size-request-mode
   :height-for-width :width-for-height)
@@ -349,7 +349,7 @@ otherwise set state = VALUE"
 (defgtkgetter request-mode size-request-mode widget)
 
 (defcfun gtk-widget-get-preferred-size :void
-  (widget pobject) 
+  (widget pobject)
   (minimum (struct requisition :out t))
   (natural (struct requisition :out t)))
 
@@ -363,13 +363,13 @@ Minimum and natural are requisition objects."
       (values minimum natural))))
 
 (defcstruct* requested-size
-  "GtkRequestedSize"
+    "GtkRequestedSize"
   (data pobject)
   (minimum-size :int)
   (natural-size :int))
 
 (defcfun gtk-distribute-natural-allocation :int
-  (extra-space :int) (n-requested-sizes :int) 
+  (extra-space :int) (n-requested-sizes :int)
   (sizes (carray (struct requested-size))))
 
 (defun distribute-natural-allocation (extra-space sizes)
@@ -384,27 +384,27 @@ SIZES -- {(widget minimum-size natural-size)}*"
                              (natural-size res) natural-size)
                        res)))
                  sizes)))
-    (gtk-distribute-natural-allocation extra-space (length sizes) 
+    (gtk-distribute-natural-allocation extra-space (length sizes)
                                        sizes-struct)))
 
 (template (name with-type) ((color t)
                             (font nil)
                             (bg-pixmap nil))
-  `(progn
-     (defmethod ,name ((widget widget) 
-                       &key ,@(when with-type '(type)) (state :normal))
-       (,name (style-context widget) ,@(when with-type '(:type type)) 
-              :state state))
-       
-     (defmethod (setf ,name) (value (widget widget) 
-                              &key ,@(when with-type '(type)) (state :normal))
-       (setf (,name (style-context widget) ,@(when with-type '(:type type))
-                    :state state)
-             value))
-     (save-setter widget ,name)))
+          `(progn
+             (defmethod ,name ((widget widget)
+                               &key ,@(when with-type '(type)) (state :normal))
+               (,name (style-context widget) ,@(when with-type '(:type type))
+                      :state state))
+
+             (defmethod (setf ,name) (value (widget widget)
+                                      &key ,@(when with-type '(type)) (state :normal))
+               (setf (,name (style-context widget) ,@(when with-type '(:type type))
+                            :state state)
+                     value))
+             (save-setter widget ,name)))
 
 (init-slots widget)
-        
+
 
 (defclass widget-class (g-object-class)
   ())
@@ -491,10 +491,10 @@ SIZES -- {(widget minimum-size natural-size)}*"
   (style-updated :pointer)
   (gtk-reserved :pointer :count 8))
 
-(defgtkfuns widget-class 
-  (install-style-property :void (pspec pobject))
+(defgtkfuns widget-class
+    (install-style-property :void (pspec pobject))
   (install-style-property-parser :void (pspec pobject) (parser pfunction))
-  (find-style-property (object g-param-spec) (name :string))) 
+  (find-style-property (object g-param-spec) (name :string)))
 
 
 (defcfun gtk-widget-class-list-style-properties (garray (object g-param-spec))
@@ -504,10 +504,8 @@ SIZES -- {(widget minimum-size natural-size)}*"
 (defmethod list-style-properties ((widget-class widget-class))
   (gtk-widget-class-list-style-properties widget-class *array-length*))
 
-(g-object-cffi::generate-property-accessors 
-          style-property widget 
-          nil gtk-widget-style-get-property
-          style-property-type
-          widget-class find-style-property %style-properties)
-
-
+(g-object-cffi::generate-property-accessors
+ style-property widget
+ nil gtk-widget-style-get-property
+ style-property-type
+ widget-class find-style-property %style-properties)

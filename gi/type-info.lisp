@@ -12,7 +12,7 @@
   ())
 
 (deffuns type-info
-  (is-pointer :boolean)
+    (is-pointer :boolean)
   (:get tag type-tag)
   (:get param-type (object type-info) (n :int))
   (:get interface (object base-info))
@@ -38,10 +38,10 @@
         (when (is-zero-terminated type-info)
           (princ ", zero terminated" stream)))
       (when (eq tag :ghash)
-        (format stream " of {~a, ~a}" 
-                (param-type type-info 0) 
+        (format stream " of {~a, ~a}"
+                (param-type type-info 0)
                 (param-type type-info 1))))))
-      
+
 
 (defcunion giargument
   (boolean :int)
@@ -55,13 +55,13 @@
   (uint64 :uint64)
   (float :float)
   (double :double)
-;  (short :short)
-;  (ushort :ushort)
-;  (int :int)
-;  (uint :uint)
-;  (long :long)
-;  (ulong :ulong)
-;  (ssize :long)
+                                        ;  (short :short)
+                                        ;  (ushort :ushort)
+                                        ;  (int :int)
+                                        ;  (uint :uint)
+                                        ;  (long :long)
+                                        ;  (ulong :ulong)
+                                        ;  (ssize :long)
   (size :ulong)
   (string :string)
   (pointer :pointer))
@@ -74,14 +74,14 @@
 (defun arg-type (place) (car place))
 (defun arg-value (place) (cdr place))
 (defun (setf arg-value) (value place) (setf (cdr place) value))
-(defun make-arg (type &optional value) 
+(defun make-arg (type &optional value)
   (cons type (or value
                  (case (tag type)
                    ((:utf8 :filename) "")
                    (:boolean nil)
                    (t 0)))))
-            
-              
+
+
 
 (define-foreign-type cffi-giargument (freeable-out)
   ()
@@ -104,13 +104,13 @@
 (defun giargument-type (slot-name)
   (cffi::slot-type (cffi::get-slot-info 'giargument slot-name)))
 
-(defun gen-to-foreign 
+(defun gen-to-foreign
     (tag place ptr &key (conv #'identity)
-                        (field (intern (symbol-name tag) #.*package*)))
+                     (field (intern (symbol-name tag) #.*package*)))
   (if (and (is-pointer (arg-type place))
            (not (member tag '(:utf8 :interface :filename))))
-      (let ((ptr2 (foreign-alloc (giargument-type field) 
-                                 :initial-contents 
+      (let ((ptr2 (foreign-alloc (giargument-type field)
+                                 :initial-contents
                                  (funcall conv (arg-value place)))))
         (setf (foreign-slot-value ptr 'giargument 'pointer) ptr2))
       (setf (foreign-slot-value ptr 'giargument field)
@@ -118,52 +118,52 @@
 
 (defun gen-from-foreign
     (tag place ptr &key (conv #'identity)
-                        (field (intern (symbol-name tag) #.*package*)))
+                     (field (intern (symbol-name tag) #.*package*)))
   (if (and (is-pointer (arg-type place))
            (not (member tag '(:utf8 :interface :filename))))
       (let ((ptr2 (foreign-slot-value ptr 'giargument 'pointer)))
-        (setf (arg-value place) 
+        (setf (arg-value place)
               (funcall conv (mem-ref ptr2 (giargument-type field))))
         (foreign-free ptr2))
       (setf (arg-value place)
             (funcall conv (foreign-slot-value ptr 'giargument field)))))
 
-                       
+
 
 (defun to-foreign (tag place ptr)
   (case tag
-    (:boolean (gen-to-foreign tag place ptr 
+    (:boolean (gen-to-foreign tag place ptr
                               :conv (lambda (x) (if x 1 0))))
-    ((:int8 :uint8 :int16 :uint16 
-                          :int32 :uint32 :int64 :uint64 :float :double)
+    ((:int8 :uint8 :int16 :uint16
+            :int32 :uint32 :int64 :uint64 :float :double)
      (gen-to-foreign tag place ptr))
     (:gtype (gen-to-foreign tag place ptr :field 'size))
     ((:utf8 :filename) (gen-to-foreign tag place ptr :field 'string))
-    (:interface (gen-to-foreign tag place ptr 
+    (:interface (gen-to-foreign tag place ptr
                                 :field 'pointer
-                                :conv (lambda (x) 
+                                :conv (lambda (x)
                                         (convert-to-foreign x 'pobject))))
-;    (:array (gen-to-foreign tag place ptr 
-;                            :conv (build-array place)
-;                            :field 'pointer))
+                                        ;    (:array (gen-to-foreign tag place ptr
+                                        ;                            :conv (build-array place)
+                                        ;                            :field 'pointer))
     (t (error "Not implemented"))))
-                              
+
 (defun from-foreign (tag place ptr)
   (case tag
-    (:boolean (gen-from-foreign tag place ptr 
+    (:boolean (gen-from-foreign tag place ptr
                                 :conv (lambda (x) (if (= x 0) nil t))))
-    ((:int8 :uint8 :int16 :uint16 
-                          :int32 :uint32 :int64 :uint64 :float :double)
+    ((:int8 :uint8 :int16 :uint16
+            :int32 :uint32 :int64 :uint64 :float :double)
      (gen-from-foreign tag place ptr))
     (:gtype (gen-from-foreign tag place ptr :field 'size))
     ((:utf8 :filename) (gen-from-foreign tag place ptr :field 'string))
-    (:interface (gen-from-foreign tag place ptr 
+    (:interface (gen-from-foreign tag place ptr
                                   :field 'pointer
                                   :conv (lambda (x)
                                           (convert-from-foreign x 'pobject))))
-;    (:array (gen-to-foreign tag place ptr 
-;                            :conv (build-array place)
-;                            :field 'pointer))
+                                        ;    (:array (gen-to-foreign tag place ptr
+                                        ;                            :conv (build-array place)
+                                        ;                            :field 'pointer))
     (t (error "Not implemented"))))
 
 (define-foreign-type cffi-giarguments (freeable-out)
@@ -174,7 +174,7 @@
 
 (defmethod translate-to-foreign (value (arguments cffi-giarguments))
   (let* ((res (foreign-alloc 'giargument :count (length value)))
-         (p res))          
+         (p res))
     (map nil
          (lambda (arg)
            (to-foreign (tag (arg-type arg)) arg p)

@@ -28,21 +28,21 @@
   (children nil :type (or null (vector node)))
   (address "" :type string)
   (index 0 :type fixnum))
-  
+
 
 (defun make-tree-array (tree)
   (let (res arr-tree)
     (labels ((process-child (child)
                (declare (special i prefix))
-               (let ((address (concatenate 'string prefix ":" 
+               (let ((address (concatenate 'string prefix ":"
                                            (princ-to-string i))))
-                 (let ((index (length res))) 
+                 (let ((index (length res)))
                    (push (cons (subseq address 1) (car child)) res)
                    (incf i)
                    (let ((i 0) (prefix address))
-                         (declare (special i prefix))
-                         (cons index
-                               (process (cdr child)))))))
+                     (declare (special i prefix))
+                     (cons index
+                           (process (cdr child)))))))
              (process (seq)
                (let ((l (mapcar #'process-child seq)))
                  (when l (coerce l 'simple-vector)))))
@@ -54,10 +54,10 @@
 (defclass lisp-model-tree-array (lisp-model-tree)
   ((array :accessor larray :type (array tree-item))
    (tree :accessor tree :type list))
-  (:documentation 
+  (:documentation
    "ARRAY should contain lists with address as car and columns data as cdr"))
 
-(defmethod shared-initialize :after ((o lisp-model-tree-array) slot-names 
+(defmethod shared-initialize :after ((o lisp-model-tree-array) slot-names
                                      &key tree)
   (setf (values (larray o) (tree o)) (make-tree-array tree)))
 
@@ -105,7 +105,7 @@
           (values t (car child) (cdr child))))))
 
 (defmethod get-iter ((lisp-model lisp-model-tree-array) iter path)
-  (multiple-value-bind (found index) (descend (tree lisp-model) 
+  (multiple-value-bind (found index) (descend (tree lisp-model)
                                               (coerce path 'list))
     (when found (set-iter iter index))))
 
@@ -114,7 +114,7 @@
 
 (defun iter->aref (lisp-model iter)
   (aref (larray lisp-model) (iter->index iter)))
-  
+
 (defgeneric get-path (lisp-model-impl iter)
   (:method ((lisp-model-list lisp-model-list) iter)
     (list (iter->index iter)))
@@ -141,16 +141,16 @@
      (for ch in-string str)
      (if (char-equal ch #\:)
          (progn
-          (push (parse-integer buf) res)
-          (setf buf ""))
-         (setf buf (concatenate 'string buf 
-                                (make-string 1 :initial-element ch))))) 
-    (push (parse-integer buf) res) 
-    (nreverse res)))                
+           (push (parse-integer buf) res)
+           (setf buf ""))
+         (setf buf (concatenate 'string buf
+                                (make-string 1 :initial-element ch)))))
+    (push (parse-integer buf) res)
+    (nreverse res)))
 
 (defun iter->path-list (tree iter)
   (path-string->list (car (iter->aref tree iter))))
-  
+
 
 (defun move-tree-iter-checked (lisp-model-tree iter delta)
   (multiple-value-bind (found index)
@@ -174,7 +174,7 @@
 
 (defgeneric iter-children (lisp-model-impl iter parent)
   (:method ((lisp-model-list lisp-model-list) iter parent)
-;    (break)
+                                        ;    (break)
     (unless parent
       (set-iter iter 0)))
   (:method ((lisp-model lisp-model-tree-array) iter parent)
@@ -203,9 +203,9 @@
       (length children))))
 
 (defgeneric iter-nth-child (lisp-model-impl iter parent n)
-  (:method ((lisp-model-list lisp-model-list) iter parent n) 
+  (:method ((lisp-model-list lisp-model-list) iter parent n)
     (when (and (null parent) (< n (lisp-model-length lisp-model-list)))
-        (set-iter iter n)))
+      (set-iter iter n)))
   (:method ((lisp-model lisp-model-tree-array) iter parent n)
     (multiple-value-bind (found index)
         (descend (tree lisp-model)
@@ -250,20 +250,20 @@
 (defmacro init-interface (interface &rest callbacks)
   `(progn
      ,@(loop :for (callback args) :on callbacks :by #'cddr
-        :collecting
-         `(defcallback ,(symbolicate '#:cb- callback) ,(car args) 
-              ((object pobject) ,@(cdr args))
-            ;(debug-out "callback: ~a~%" ',callback)
-            (,callback (implementation object) ,@(mapcar #'car (cdr args)))))
-     (defcallback ,(symbolicate  '#:cb-init- interface) 
+          :collecting
+          `(defcallback ,(symbolicate '#:cb- callback) ,(car args)
+               ((object pobject) ,@(cdr args))
+                                        ;(debug-out "callback: ~a~%" ',callback)
+             (,callback (implementation object) ,@(mapcar #'car (cdr args)))))
+     (defcallback ,(symbolicate  '#:cb-init- interface)
          :void ((class ,interface))
        ,@(loop :for (callback args) :on callbacks :by #'cddr
-            :collecting `(setf (foreign-slot-value class 
+            :collecting `(setf (foreign-slot-value class
                                                    ',interface ; :struct
                                                    ',callback)
                                (callback ,(symbolicate '#:cb- callback)))))))
 
-(init-interface 
+(init-interface
  tree-model-iface
  get-flags (:int)
  get-n-columns (:int)
@@ -275,13 +275,13 @@
                   (value :pointer))
  iter-next (:boolean (iter (object tree-iter)))
  iter-previous (:boolean (iter (object tree-iter)))
- iter-children (:boolean (iter (object tree-iter)) 
-                         (parent (object tree-iter))) 
+ iter-children (:boolean (iter (object tree-iter))
+                         (parent (object tree-iter)))
  iter-has-child (:boolean (iter (object tree-iter)))
  iter-n-children (:int (iter (object tree-iter)))
- iter-nth-child (:boolean (iter (object tree-iter)) 
+ iter-nth-child (:boolean (iter (object tree-iter))
                           (parent (object tree-iter)) (n :int))
- iter-parent (:boolean (iter (object tree-iter)) 
+ iter-parent (:boolean (iter (object tree-iter))
                        (child (object tree-iter)))
  ref-node (:void (iter (object tree-iter)))
  unref-node (:void (iter (object tree-iter))))
@@ -292,7 +292,7 @@
   (finalize :pointer)
   (data pdata))
 
-(defcfun gtk-tree-model-get-type :uint) 
+(defcfun gtk-tree-model-get-type :uint)
 
 (defgeneric get-type (lisp-model))
 (let ((interface-info (foreign-alloc 'g-interface-info))
@@ -311,7 +311,7 @@
                    (foreign-type-size 'g-object)
                    (callback cb-lisp-model-init)
                    0))
-          
+
           (g-type-add-interface-static g-type
                                        (gtk-tree-model-get-type)
                                        interface-info)))))

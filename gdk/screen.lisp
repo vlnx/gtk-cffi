@@ -18,5 +18,3 @@
 
 (defmethod height ((screen screen))
   (gdk-screen-get-height screen))
-
-

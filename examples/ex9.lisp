@@ -11,8 +11,8 @@
                  (make-instance 'lisp-model-array
                                 :array #((1) (2) (3))
                                 :columns '(:string :int))))
-                                ;:array #(("ok" 1))
-                                ;:columns '(:string :int))))
+                                        ;:array #(("ok" 1))
+                                        ;:columns '(:string :int))))
 
 (defparameter *model0*
   (make-instance 'list-store :columns '(:int)))
@@ -28,13 +28,13 @@
 
 (defparameter *window*
   (gtk-model
-    'window :width 400
-            :height 400
-            :signals '(:destroy :gtk-main-quit)
-    ('scrolled-window
-     ('tree-view :model *model* :columns '("Test str" "Test int"))))); "Test int"))))
+   'window :width 400
+   :height 400
+   :signals '(:destroy :gtk-main-quit)
+   ('scrolled-window
+    ('tree-view :model *model* :columns '("Test str" "Test int"))))); "Test int"))))
 
 (show *window*)
-;(show #(1 2 3 4 5))
+                                        ;(show #(1 2 3 4 5))
 
 (gtk-main)

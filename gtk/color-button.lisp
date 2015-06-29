@@ -22,13 +22,13 @@
     (t (gtk-color-button-new))))
 
 (defslots color-button
-  rgba prgba
-  alpha :uint16
-  use-alpha :boolean
-  title :string)
+    rgba prgba
+    alpha :uint16
+    use-alpha :boolean
+    title :string)
 
 (deffuns color-button
-  (:get color pcolor &key)
+    (:get color pcolor &key)
   (:set color pcolor &key))
 
 (init-slots color-button)

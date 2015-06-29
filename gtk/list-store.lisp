@@ -1,7 +1,7 @@
 ;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
 ;;;
 ;;; list-store.lisp -- GtkListStore object
-;;;                 
+;;;
 ;;;
 ;;; Copyright (C) 2007, Roman Klochkov <kalimehtar@mail.ru>
 ;;;
@@ -30,38 +30,38 @@ NB! Should there be named columns?"
     (mapc (lambda (row) (append-values list-store row)) values)))
 
 
-(defcfun "gtk_list_store_append" :void 
+(defcfun "gtk_list_store_append" :void
   (store pobject) (iter (struct tree-iter :out t)))
 
 (defun show-iter (prefix tree-iter)
-  (format t "~a: ~a ~a ~a~%" prefix tree-iter (pointer tree-iter) 
+  (format t "~a: ~a ~a ~a~%" prefix tree-iter (pointer tree-iter)
           (when (slot-boundp tree-iter 'cffi-objects::value)
             (slot-value tree-iter 'cffi-objects::value))))
- 
+
 
 (defmethod append-iter ((list-store list-store) &optional
-                        (tree-iter (tree-iter list-store)))
+                                                  (tree-iter (tree-iter list-store)))
   (gtk-list-store-append list-store tree-iter))
-;  (show-iter "appended" tree-iter))
+                                        ;  (show-iter "appended" tree-iter))
 
-(defcfun "gtk_list_store_set_value" :void (store pobject) 
+(defcfun "gtk_list_store_set_value" :void (store pobject)
          (iter (struct tree-iter)) (column :int) (g-value pobject))
 
 (defmethod (setf model-values)
-  (values (list-store list-store)
-   &key (tree-iter (tree-iter list-store)) column 
-        (columns (when column (list column))))
+    (values (list-store list-store)
+     &key (tree-iter (tree-iter list-store)) column
+       (columns (when column (list column))))
   "Example: (setf (model-values list-store :col 1) \"val1\")"
   (declare (type list columns values))
   (let ((%cols (append columns (loop :for i
-                                     :from (length columns)
-                                     :below (length values)
-                                     :collecting i))))
+                                  :from (length columns)
+                                  :below (length values)
+                                  :collecting i))))
     (mapcar
      (lambda (col val)
        (with-g-value (:value val :g-type (column-type list-store col))
-         ;(show-iter "set" tree-iter)
-;         (format t "set val: ~a type: ~a~%" val (column-type list-store col))
+                                        ;(show-iter "set" tree-iter)
+                                        ;         (format t "set val: ~a type: ~a~%" val (column-type list-store col))
          (assert (/= (g-type *g-value*) 0))
          (gtk-list-store-set-value list-store
                                    tree-iter col *g-value*)
@@ -76,4 +76,3 @@ NB! Should there be named columns?"
 (defmethod append-values ((list-store list-store) values)
   (append-iter list-store)
   (setf (model-values list-store) values))
-          

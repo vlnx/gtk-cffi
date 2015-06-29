@@ -6,13 +6,13 @@
 (defcfun gtk-text-mark-new :pointer (name :string) (left-gravity :boolean))
 
 (defmethod gconstructor ((text-mark text-mark) &key name left-gravity
-                         &allow-other-keys)
+                                                 &allow-other-keys)
   (gtk-text-mark-new name left-gravity))
 
 (defgtkslot text-mark visible :boolean)
 
 (defgtkfuns text-mark
-  (:get deleted :boolean)
+    (:get deleted :boolean)
   (:get name :string)
   (:get buffer pobject)
   (:get left-gravity :boolean))
