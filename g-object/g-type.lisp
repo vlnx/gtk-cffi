@@ -54,7 +54,10 @@
 
 (defun g-type->keyword (num)
   "Integer (GType) -> keyword from +fundamental-gtypes+"
-  (or (nth (/ (g-type-fundamental num) 4) +fundamental-g-types+) :object))
+  (or (nth (/ (g-type-fundamental num)
+              4)
+           +fundamental-g-types+)
+      :object))
 
 (defvar *types* (make-hash-table)
   "Hash table: GType num -> lisp object")
