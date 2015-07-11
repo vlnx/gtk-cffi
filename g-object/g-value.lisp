@@ -27,7 +27,7 @@
   (g-type-type :ulong)
   (data g-value-data :count 2)) ;; with new CFFI -> (:union g-value-data)
 
-(defcfun "g_value_init" :pointer (g-value pobject) (type :int))
+(defcfun "g_value_init" :pointer (g-value pobject) (type g-type))
 (defcfun "g_value_set_boolean" :void (g-value pobject) (val :boolean))
 (defcfun "g_value_set_char" :void (g-value pobject) (val :char))
 (defcfun "g_value_set_uchar" :void (g-value pobject) (val :uchar))
