@@ -25,7 +25,7 @@
 (defcstruct* g-value-struct
     "GValue struct"
   (g-type-type :ulong)
-  (data g-value-data :count 2)) ;; with new CFFI -> (:union g-value-data)
+  (data (:union g-value-data) :count 2))
 
 (defcfun "g_value_init" :pointer (g-value pobject) (type g-type))
 (defcfun "g_value_set_boolean" :void (g-value pobject) (val :boolean))
