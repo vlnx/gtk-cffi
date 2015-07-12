@@ -171,8 +171,7 @@ Returns integer GType."
                                         ;                (g-type->lisp g-type))
         (let ((res (case fundamental-type
                      (#.(keyword->g-type :boxed)
-                        (find-object (g-value-get-boxed value)
-                                     (g-type->lisp g-type)))
+                        (g-value-get-boxed value))
                      (#.(keyword->g-type :enum)
                         (convert-from-foreign
                          (g-value-get-enum value) (g-type->lisp g-type)))
