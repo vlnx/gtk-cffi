@@ -40,7 +40,7 @@
 
 (defcfun g-type-fundamental g-type (id g-type))
 (defcfun g-type-from-name g-type (name :string))
-(defcfun g-type-name :string (id :ulong))
+(defcfun g-type-name :string (id g-type))
 
 (defcstruct* g-type-query
     "GTypeQuery"
