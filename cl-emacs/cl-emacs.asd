@@ -10,12 +10,12 @@
 (in-package #:emacs-system)
 
 (defsystem cl-emacs
-  :description "Emacs-like editr on GTK3"
-  :author "Roman Klochkov <kalimehtar@mail.ru>"
-  :version "0.1"
-  :license "GPL"
-  :depends-on (gtk-cffi alexandria iterate split-sequence flexi-streams)
-  :components
-  ((:file package)
-   (:file keymap :depends-on (package))
-   (:file main :depends-on (keymap))))
+    :description "Emacs-like editr on GTK3"
+    :author "Roman Klochkov <kalimehtar@mail.ru>"
+    :version "0.1"
+    :license "GPL"
+    :depends-on (gtk-cffi alexandria iterate split-sequence flexi-streams)
+    :components
+    ((:file package)
+     (:file keymap :depends-on (package))
+     (:file main :depends-on (keymap))))

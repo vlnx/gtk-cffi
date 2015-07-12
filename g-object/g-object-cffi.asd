@@ -10,20 +10,19 @@
 (in-package #:gobject-cffi-system)
 
 (defsystem g-object-cffi
-  :description "GObject,GType and GValue staff for gtk-cffi"
-  :author "Roman Klochkov <kalimehtar@mail.ru>"
-  :version "0.3"
-  :license "BSD"
-  :depends-on (g-lib-cffi gtk-cffi-utils)
-  :components
-  ((:file package)
-   (:file loadlib :depends-on (package))
-   (:file generics :depends-on (package))
-   (:file g-type :depends-on (loadlib generics))
-   (:file pobject :depends-on (g-type))
-   (:file defslots :depends-on (pobject))
-   (:file g-value :depends-on (pobject))
-   (:file g-object :depends-on (g-value))
-   (:file g-object-class :depends-on (g-object))
-   (:file subclass :depends-on (g-object))))
-
+    :description "GObject,GType and GValue staff for gtk-cffi"
+    :author "Roman Klochkov <kalimehtar@mail.ru>"
+    :version "0.3"
+    :license "BSD"
+    :depends-on (g-lib-cffi gtk-cffi-utils)
+    :components
+    ((:file package)
+     (:file loadlib :depends-on (package))
+     (:file generics :depends-on (package))
+     (:file g-type :depends-on (loadlib generics))
+     (:file pobject :depends-on (g-type))
+     (:file defslots :depends-on (pobject))
+     (:file g-value :depends-on (pobject))
+     (:file g-object :depends-on (g-value))
+     (:file g-object-class :depends-on (g-object))
+     (:file subclass :depends-on (g-object))))
